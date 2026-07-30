@@ -1,0 +1,43 @@
+server:
+  port: 8083
+  
+spring:
+  application:
+    name: BearingHousingBackend
+  datasource:
+    url: jdbc:postgresql://localhost:5432/bearing_housing_db
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+
+    hikari:
+      minimumIdle: 2
+      maximumPoolSize: 50
+      connectionTimeout: 900000
+      idleTimeout: 600000
+      maxLifetime: 1800000
+      leakDetectionThreshold: 900000
+
+    # dbcp2:
+    #   test-while-idle: true
+    #   validation-query: select 1
+
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+      # naming:
+        # implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyHbmImpl
+        # physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
+
+  devtools:
+    restart:
+      log-condition-evaluation-delta: false
+
+bearinghousing:
+  photos:
+    directory: C:/Users/aniln/Documents/bearingHoushingPhotos
+    directories: C:/Users/aniln/Documents/bearingHoushingPhotos
+
+report:
+  base-dir: C:/Reports
