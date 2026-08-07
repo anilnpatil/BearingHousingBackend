@@ -137,6 +137,14 @@ public class BearingHousingProductionDataController {
             if (pageNumber < 0 || pageSize <= 0) {
                 throw new BadRequestException("Page must be >= 0 and size must be > 0");
             }
+            
+            if (sku == null || sku.trim().isEmpty() || "0".equals(sku.trim())) {
+                sku = null;
+            }
+
+            if (shift != null && shift == 0) {
+                shift = null;
+            }
 
             PaginatedResponse<BearingHousingProductionData> response = 
                     productionDataService.getProductionDataByDateRange(startDate, endDate, shift, sku, pageNumber, pageSize);
