@@ -69,6 +69,8 @@ public class BearingHousingImageRepository {
 
           data.setP1_toxDisplacementActual(rs.getFloat("p1_tox_displacement_actual"));
 
+          data.setP1_graphStatus(rs.getInt("p1_graph_status"));
+
           data.setP2_beforeGlueStatus(rs.getInt("p2_before_glue_status"));
 
           data.setP2_afterGlueStatus(rs.getInt("p2_after_glue_status"));
@@ -84,6 +86,8 @@ public class BearingHousingImageRepository {
           data.setP2_toxDisplacementMin(rs.getFloat("p2_tox_displacement_min"));
 
           data.setP2_toxDisplacementActual(rs.getFloat("p2_tox_displacement_actual"));
+
+          data.setP2_graphStatus(rs.getInt("p2_graph_status"));
 
           data.setFinalStatus(rs.getInt("final_status"));
 
@@ -135,6 +139,7 @@ public class BearingHousingImageRepository {
                     data.setP1_toxDisplacementMax(rs.getFloat("p1_tox_displacement_max"));
                     data.setP1_toxDisplacementMin(rs.getFloat("p1_tox_displacement_min"));
                     data.setP1_toxDisplacementActual(rs.getFloat("p1_tox_displacement_actual"));
+                    data.setP1_graphStatus(rs.getInt("p1_graph_status"));
                     data.setP2_beforeGlueStatus(rs.getInt("p2_before_glue_status"));
                     data.setP2_afterGlueStatus(rs.getInt("p2_after_glue_status"));
                     data.setP2_toxLoadMax(rs.getFloat("p2_tox_load_max"));
@@ -143,6 +148,7 @@ public class BearingHousingImageRepository {
                     data.setP2_toxDisplacementMax(rs.getFloat("p2_tox_displacement_max"));
                     data.setP2_toxDisplacementMin(rs.getFloat("p2_tox_displacement_min"));
                     data.setP2_toxDisplacementActual(rs.getFloat("p2_tox_displacement_actual"));
+                    data.setP2_graphStatus(rs.getInt("p2_graph_status"));
                     data.setFinalStatus(rs.getInt("final_status"));
                     data.setTotalPartCount(rs.getInt("total_part_count"));
                     data.setOkCount(rs.getInt("ok_count"));

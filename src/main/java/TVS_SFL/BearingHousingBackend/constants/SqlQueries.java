@@ -15,11 +15,17 @@ public final class SqlQueries {
             BearingHousingConstants.COLUMN_CYCLE_TIME + ", " +
             BearingHousingConstants.COLUMN_PRODUCTION_DATETIME + ", " + BearingHousingConstants.COLUMN_SKU + ", " +
             BearingHousingConstants.COLUMN_SHIFT + ", " + BearingHousingConstants.COLUMN_NUMBER_OF_PROCESS + ", " +
-            BearingHousingConstants.COLUMN_TOX_LOAD_MAX + ", " + BearingHousingConstants.COLUMN_TOX_LOAD_MIN + ", " +
-            BearingHousingConstants.COLUMN_TOX_DISPLACEMENT_MAX + ", " + BearingHousingConstants.COLUMN_TOX_DISPLACEMENT_MIN + ", " +
+            BearingHousingConstants.COLUMN_P1_BEFORE_GLUE_STATUS + ", " + BearingHousingConstants.COLUMN_P1_AFTER_GLUE_STATUS + ", " +
+            BearingHousingConstants.COLUMN_P1_TOX_LOAD_MAX + ", " + BearingHousingConstants.COLUMN_P1_TOX_LOAD_MIN + ", " + BearingHousingConstants.COLUMN_P1_TOX_LOAD_ACTUAL_VALUE + ", " +
+            BearingHousingConstants.COLUMN_P1_TOX_DISPLACEMENT_MAX + ", " + BearingHousingConstants.COLUMN_P1_TOX_DISPLACEMENT_MIN + ", " + BearingHousingConstants.COLUMN_P1_TOX_DISPLACEMENT_ACTUAL_VALUE + ", " +
+            BearingHousingConstants.COLUMN_P1_GRAPH_STATUS + ", " +
+            BearingHousingConstants.COLUMN_P2_BEFORE_GLUE_STATUS + ", " + BearingHousingConstants.COLUMN_P2_AFTER_GLUE_STATUS + ", " +
+            BearingHousingConstants.COLUMN_P2_TOX_LOAD_MAX + ", " + BearingHousingConstants.COLUMN_P2_TOX_LOAD_MIN + ", " + BearingHousingConstants.COLUMN_P2_TOX_LOAD_ACTUAL_VALUE + ", " +
+            BearingHousingConstants.COLUMN_P2_TOX_DISPLACEMENT_MAX + ", " + BearingHousingConstants.COLUMN_P2_TOX_DISPLACEMENT_MIN + ", " + BearingHousingConstants.COLUMN_P2_TOX_DISPLACEMENT_ACTUAL_VALUE + ", " +
+            BearingHousingConstants.COLUMN_P2_GRAPH_STATUS + ", " +
             BearingHousingConstants.COLUMN_FINAL_STATUS + ", " + BearingHousingConstants.COLUMN_TOTAL_PART_COUNT + ", " +
             BearingHousingConstants.COLUMN_OK_COUNT + ", " + BearingHousingConstants.COLUMN_NOT_OK_COUNT + ", " +
-            BearingHousingConstants.COLUMN_OPERATOR_NAME + ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            BearingHousingConstants.COLUMN_OPERATOR_NAME + ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     public static final String SELECT_LAST_INSERTED = "SELECT * FROM " + BearingHousingConstants.TABLE_NAME + " ORDER BY " + BearingHousingConstants.COLUMN_ID + " DESC LIMIT 1";
 
@@ -29,8 +35,14 @@ public final class SqlQueries {
             BearingHousingConstants.COLUMN_CYCLE_TIME + " = ?, " +
             BearingHousingConstants.COLUMN_PRODUCTION_DATETIME + " = ?, " + BearingHousingConstants.COLUMN_SKU + " = ?, " +
             BearingHousingConstants.COLUMN_SHIFT + " = ?, " + BearingHousingConstants.COLUMN_NUMBER_OF_PROCESS + " = ?, " +
-            BearingHousingConstants.COLUMN_TOX_LOAD_MAX + " = ?, " + BearingHousingConstants.COLUMN_TOX_LOAD_MIN + " = ?, " +
-            BearingHousingConstants.COLUMN_TOX_DISPLACEMENT_MAX + " = ?, " + BearingHousingConstants.COLUMN_TOX_DISPLACEMENT_MIN + " = ?, " +
+            BearingHousingConstants.COLUMN_P1_BEFORE_GLUE_STATUS + " = ?, " + BearingHousingConstants.COLUMN_P1_AFTER_GLUE_STATUS + " = ?, " +
+            BearingHousingConstants.COLUMN_P1_TOX_LOAD_MAX + " = ?, " + BearingHousingConstants.COLUMN_P1_TOX_LOAD_MIN + " = ?, " + BearingHousingConstants.COLUMN_P1_TOX_LOAD_ACTUAL_VALUE + " = ?, " +
+            BearingHousingConstants.COLUMN_P1_TOX_DISPLACEMENT_MAX + " = ?, " + BearingHousingConstants.COLUMN_P1_TOX_DISPLACEMENT_MIN + " = ?, " + BearingHousingConstants.COLUMN_P1_TOX_DISPLACEMENT_ACTUAL_VALUE + " = ?, " +
+            BearingHousingConstants.COLUMN_P1_GRAPH_STATUS + " = ?, " +
+            BearingHousingConstants.COLUMN_P2_BEFORE_GLUE_STATUS + " = ?, " + BearingHousingConstants.COLUMN_P2_AFTER_GLUE_STATUS + " = ?, " +
+            BearingHousingConstants.COLUMN_P2_TOX_LOAD_MAX + " = ?, " + BearingHousingConstants.COLUMN_P2_TOX_LOAD_MIN + " = ?, " + BearingHousingConstants.COLUMN_P2_TOX_LOAD_ACTUAL_VALUE + " = ?, " +
+            BearingHousingConstants.COLUMN_P2_TOX_DISPLACEMENT_MAX + " = ?, " + BearingHousingConstants.COLUMN_P2_TOX_DISPLACEMENT_MIN + " = ?, " + BearingHousingConstants.COLUMN_P2_TOX_DISPLACEMENT_ACTUAL_VALUE + " = ?, " +
+            BearingHousingConstants.COLUMN_P2_GRAPH_STATUS + " = ?, " +
             BearingHousingConstants.COLUMN_FINAL_STATUS + " = ?, " + BearingHousingConstants.COLUMN_TOTAL_PART_COUNT + " = ?, " +
             BearingHousingConstants.COLUMN_OK_COUNT + " = ?, " + BearingHousingConstants.COLUMN_NOT_OK_COUNT + " = ?, " +
             BearingHousingConstants.COLUMN_OPERATOR_NAME + " = ? WHERE " + BearingHousingConstants.COLUMN_ID + " = ?";

@@ -29,6 +29,7 @@ public class BearingHousingMapper {
         dto.setP1_toxDisplacementMax(entity.getP1_toxDisplacementMax());
         dto.setP1_toxDisplacementMin(entity.getP1_toxDisplacementMin());
         dto.setP1_toxDisplacementActual(entity.getP1_toxDisplacementActual());
+        dto.setP1_graphStatus(entity.getP1_graphStatus());
         dto.setP2_beforeGlueStatus(entity.getP2_beforeGlueStatus());
         dto.setP2_afterGlueStatus(entity.getP2_afterGlueStatus());
         dto.setP2_toxLoadMax(entity.getP2_toxLoadMax());
@@ -37,6 +38,7 @@ public class BearingHousingMapper {
         dto.setP2_toxDisplacementMax(entity.getP2_toxDisplacementMax());
         dto.setP2_toxDisplacementMin(entity.getP2_toxDisplacementMin());
         dto.setP2_toxDisplacementActual(entity.getP2_toxDisplacementActual());
+        dto.setP2_graphStatus(entity.getP2_graphStatus());
         dto.setFinalStatus(entity.getFinalStatus());
         dto.setTotalPartCount(entity.getTotalPartCount());
         dto.setOkCount(entity.getOkCount());
@@ -70,6 +72,7 @@ public class BearingHousingMapper {
         entity.setP1_toxDisplacementMax(dto.getP1_toxDisplacementMax());
         entity.setP1_toxDisplacementMin(dto.getP1_toxDisplacementMin());
         entity.setP1_toxDisplacementActual(dto.getP1_toxDisplacementActual());
+        entity.setP1_graphStatus(dto.getP1_graphStatus());
         entity.setP2_beforeGlueStatus(dto.getP2_beforeGlueStatus());
         entity.setP2_afterGlueStatus(dto.getP2_afterGlueStatus());
         entity.setP2_toxLoadMax(dto.getP2_toxLoadMax());
@@ -78,6 +81,7 @@ public class BearingHousingMapper {
         entity.setP2_toxDisplacementMax(dto.getP2_toxDisplacementMax());
         entity.setP2_toxDisplacementMin(dto.getP2_toxDisplacementMin());
         entity.setP2_toxDisplacementActual(dto.getP2_toxDisplacementActual());
+        entity.setP2_graphStatus(dto.getP2_graphStatus());
         entity.setFinalStatus(dto.getFinalStatus());
         entity.setTotalPartCount(dto.getTotalPartCount());
         entity.setOkCount(dto.getOkCount());

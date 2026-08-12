@@ -71,6 +71,7 @@ public class BearingHousingProductionDataRepository {
 
                     data.setP1_toxLoadActual(
                             rs.getFloat("p1_tox_load_actual"));
+                            
 
                     data.setP1_toxDisplacementMax(
                             rs.getFloat("p1_tox_displacement_max"));
@@ -80,6 +81,9 @@ public class BearingHousingProductionDataRepository {
 
                     data.setP1_toxDisplacementActual(
                             rs.getFloat("p1_tox_displacement_actual"));
+                     
+                    data.setP1_graphStatus(
+                            rs.getInt("p1_graph_status"));     
 
                     data.setP2_beforeGlueStatus(
                             rs.getInt("p2_before_glue_status"));
@@ -97,13 +101,16 @@ public class BearingHousingProductionDataRepository {
                             rs.getFloat("p2_tox_load_actual"));
 
                     data.setP2_toxDisplacementMax(
-                            rs.getFloat("p2_"));
+                            rs.getFloat("p2_tox_displacement_max"));
 
                     data.setP2_toxDisplacementMin(
                             rs.getFloat("p2_tox_displacement_min"));
 
                     data.setP2_toxDisplacementActual(
                             rs.getFloat("p2_tox_displacement_actual"));
+
+                    data.setP2_graphStatus(
+                            rs.getInt("p2_graph_status"));        
 
                     data.setFinalStatus(
                             rs.getInt("final_status"));        

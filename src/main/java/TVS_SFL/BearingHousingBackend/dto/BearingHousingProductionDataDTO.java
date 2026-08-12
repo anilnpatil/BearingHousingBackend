@@ -30,7 +30,8 @@ public class BearingHousingProductionDataDTO {
     private Float p1_toxLoadActual;
     private Float p1_toxDisplacementMax;
     private Float p1_toxDisplacementMin;
-    private Float p1_toxDisplacementActual;    
+    private Float p1_toxDisplacementActual;
+    private Integer p1_graphStatus;
     private Integer p2_beforeGlueStatus;
     private Integer p2_afterGlueStatus;
     private Float p2_toxLoadMax;
@@ -39,6 +40,7 @@ public class BearingHousingProductionDataDTO {
     private Float p2_toxDisplacementMax;
     private Float p2_toxDisplacementMin;
     private Float p2_toxDisplacementActual;
+    private Integer p2_graphStatus;
     private Integer finalStatus;    
     private Integer totalPartCount;    
     private Integer okCount;    

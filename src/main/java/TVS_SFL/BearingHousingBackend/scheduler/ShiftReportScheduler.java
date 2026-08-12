@@ -24,8 +24,9 @@ public class ShiftReportScheduler {
      * Shift 2: 14:00 to 22:00
      * Shift 3: 22:00 to 06:00
      */
-    // @Scheduled(cron = "0 0 14 * * *")
-    @Scheduled(cron = "0 09 12 * * *")
+    
+    
+    @Scheduled(cron = "0 09 14 * * *")
     public void generateShift1Report() {
         LocalDate today = LocalDate.now();
         LocalDateTime start = LocalDateTime.of(today, LocalTime.of(6, 0));
@@ -33,8 +34,8 @@ public class ShiftReportScheduler {
         reportExportService.generateShiftReport(1, start, end);
     }
 
-    // @Scheduled(cron = "0 0 22 * * *")
-    @Scheduled(cron = "0 57 18 * * *")
+    
+    @Scheduled(cron = "0 09 22 * * *")
     public void generateShift2Report() {
         LocalDate today = LocalDate.now();
         LocalDateTime start = LocalDateTime.of(today, LocalTime.of(14, 0));
@@ -42,8 +43,8 @@ public class ShiftReportScheduler {
         reportExportService.generateShiftReport(2, start, end);
     }
 
-    // @Scheduled(cron = "0 0 6 * * *")
-    @Scheduled(cron = "0 0 18 * * *")
+    
+    @Scheduled(cron = "0 09 6 * * *")
     public void generateShift3Report() {
         LocalDate today = LocalDate.now();
         LocalDateTime start = LocalDateTime.of(today, LocalTime.of(22, 0));

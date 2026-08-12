@@ -88,8 +88,13 @@ public class BearingHousingProductionDataServiceImpl implements BearingHousingPr
 
                 entity.setP1_toxDisplacementActual(
                         rs.getObject("p1_tox_displacement_actual", Float.class));
+
+                entity.setP1_graphStatus(
+                        rs.getObject("p1_graph_status", Integer.class)); 
+
                 entity.setP2_beforeGlueStatus(
-                        rs.getObject("p2_before_glue_status", Integer.class));        
+                        rs.getObject("p2_before_glue_status", Integer.class));
+                                
                 entity.setP2_afterGlueStatus(
                         rs.getObject("p2_after_glue_status", Integer.class));
 
@@ -110,6 +115,9 @@ public class BearingHousingProductionDataServiceImpl implements BearingHousingPr
 
                 entity.setP2_toxDisplacementActual(
                         rs.getObject("p2_tox_displacement_actual", Float.class));
+
+                entity.setP2_graphStatus(
+                        rs.getObject("p2_graph_status", Integer.class));        
 
                 entity.setFinalStatus(
                         rs.getObject("final_status", Integer.class));
@@ -177,6 +185,7 @@ public class BearingHousingProductionDataServiceImpl implements BearingHousingPr
                 productionTs,
                 entity.getSku(),
                 entity.getShift(),
+                entity.getNumberofProcess(),
                 entity.getP1_beforeGlueStatus(),
                 entity.getP1_afterGlueStatus(),
                 entity.getP1_toxLoadMax(),
@@ -185,6 +194,7 @@ public class BearingHousingProductionDataServiceImpl implements BearingHousingPr
                 entity.getP1_toxDisplacementMax(),
                 entity.getP1_toxDisplacementMin(),
                 entity.getP1_toxDisplacementActual(),
+                entity.getP1_graphStatus(),
                 entity.getP2_beforeGlueStatus(),
                 entity.getP2_afterGlueStatus(),
                 entity.getP2_toxLoadMax(),
@@ -193,6 +203,7 @@ public class BearingHousingProductionDataServiceImpl implements BearingHousingPr
                 entity.getP2_toxDisplacementMax(),
                 entity.getP2_toxDisplacementMin(),
                 entity.getP2_toxDisplacementActual(),
+                entity.getP2_graphStatus(),
                 entity.getFinalStatus(),
                 entity.getTotalPartCount(),
                 entity.getOkCount(),
@@ -240,6 +251,7 @@ public class BearingHousingProductionDataServiceImpl implements BearingHousingPr
                 productionTs,
                 entity.getSku(),
                 entity.getShift(),
+                entity.getNumberofProcess(),
                 entity.getP1_beforeGlueStatus(),
                 entity.getP1_afterGlueStatus(),
                 entity.getP1_toxLoadMax(),
@@ -248,6 +260,7 @@ public class BearingHousingProductionDataServiceImpl implements BearingHousingPr
                 entity.getP1_toxDisplacementMax(),
                 entity.getP1_toxDisplacementMin(),
                 entity.getP1_toxDisplacementActual(),
+                entity.getP1_graphStatus(),
                 entity.getP2_beforeGlueStatus(),
                 entity.getP2_afterGlueStatus(),
                 entity.getP2_toxLoadMax(),
@@ -256,6 +269,7 @@ public class BearingHousingProductionDataServiceImpl implements BearingHousingPr
                 entity.getP2_toxDisplacementMax(),
                 entity.getP2_toxDisplacementMin(),
                 entity.getP2_toxDisplacementActual(),
+                entity.getP2_graphStatus(),
                 entity.getFinalStatus(),
                 entity.getTotalPartCount(),
                 entity.getOkCount(),

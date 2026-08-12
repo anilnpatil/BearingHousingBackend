@@ -23,13 +23,13 @@ import jakarta.annotation.PostConstruct;
 @RequiredArgsConstructor
 public class OldFileArchiver {
 
-    private static final Path ARCHIVE_ROOT =
-            Path.of("C:/current working directroy/bearingHoushingPhotos");
+        private static final Path ARCHIVE_ROOT =
+            Path.of("C:/BearingHousingOldFiles");
     private static final List<Path> LIVE_ROOTS = List.of(
             Path.of("C:/BearingHousingImages/IV-4"),
             Path.of("C:/BearingHousingGraphs")
     );
-    private static final String SHIFT_PREFIX = "shift";
+    private static final String SHIFT_PREFIX = "Shift";
     private static final int ARCHIVE_DAYS = 90;
 
     private final BearingHousingImageRepository repository;
@@ -40,7 +40,8 @@ public class OldFileArchiver {
         moveOldFilesToArchive();
     }
 
-    @Scheduled(cron = "0 15 0 * * *")
+    //@Scheduled(cron = "0 15 0 * * *")
+    @Scheduled(cron = "0 45 17 * * *")
     public void moveOldFilesToArchive() {
         LocalDate cutoff = LocalDate.now().minusDays(ARCHIVE_DAYS);
         List<BearingHousingProductionData> oldRecords = repository.findProductionDataOlderThan(cutoff);
@@ -53,20 +54,24 @@ public class OldFileArchiver {
         Map<String, BearingHousingProductionData> oldRecordByBarcode = oldRecords.stream()
                 .collect(Collectors.toMap(BearingHousingProductionData::getBarcode, data -> data));
 
-        Set<String> candidateFileNames = oldRecords.stream()
-                .flatMap(data -> buildExpectedFileNames(data).stream())
-                .collect(Collectors.toSet());
-
+        // For each live root, find files whose filename starts with a barcode of an old record
         for (Path liveRoot : LIVE_ROOTS) {
             try (Stream<Path> entries = Files.walk(liveRoot)) {
                 entries.filter(Files::isRegularFile)
-                        .filter(path -> candidateFileNames.contains(path.getFileName().toString()))
-                        .forEach(path -> archivePath(path, oldRecordByBarcode));
+                        .filter(path -> isSupportedFile(path.getFileName().toString()))
+                        .forEach(path -> {
+                            String fileName = path.getFileName().toString();
+                            String barcode = extractBarcode(fileName);
+                            if (barcode != null && oldRecordByBarcode.containsKey(barcode)) {
+                                archivePath(path, oldRecordByBarcode);
+                            }
+                        });
             } catch (IOException e) {
                 System.err.println("Unable to read storage directory " + liveRoot + ": " + e.getMessage());
                 e.printStackTrace();
             }
         }
+        System.out.println("Old file archive migration completed.");
     }
 
     private Set<String> buildExpectedFileNames(BearingHousingProductionData data) {
@@ -141,5 +146,12 @@ public class OldFileArchiver {
             return null;
         }
         return fileName.substring(0, delimiter);
+    }
+
+    private boolean isSupportedFile(String fileName) {
+        String lower = fileName.toLowerCase();
+        return lower.endsWith(".jpeg") || lower.endsWith(".jpg") || lower.endsWith(".png")
+                || lower.endsWith(".gif") || lower.endsWith(".bmp") || lower.endsWith(".webp")
+                || lower.endsWith(".pdf");
     }
 }

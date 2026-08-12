@@ -58,6 +58,9 @@ public class BearingHousingProductionData {
     @Column(name = "p1_tox_displacement_actual")
     private Float p1_toxDisplacementActual;
 
+    @Column(name = "p1_graph_status")
+    private Integer p1_graphStatus;
+
     @Column(name = "p2_before_glue_status")
     private Integer p2_beforeGlueStatus;
 
@@ -81,7 +84,10 @@ public class BearingHousingProductionData {
 
     @Column(name = "p2_tox_displacement_actual")
     private Float p2_toxDisplacementActual;
-    
+
+    @Column(name = "p2_graph_status")
+    private Integer p2_graphStatus;
+
     @Column(name = "final_status")
     private Integer finalStatus;
 
