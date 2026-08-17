@@ -1,5 +1,4 @@
 package TVS_SFL.BearingHousingBackend.auth.controllers;
-
 import TVS_SFL.BearingHousingBackend.auth.dto.ApiResponse;
 import TVS_SFL.BearingHousingBackend.auth.dto.AuthRequest;
 import TVS_SFL.BearingHousingBackend.auth.dto.RegisterRequest;
