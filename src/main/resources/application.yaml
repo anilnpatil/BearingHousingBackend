@@ -34,11 +34,6 @@ spring:
   devtools:
     restart:
       log-condition-evaluation-delta: false
-# bearinghousing:
-#   photos:
-#     directory: C:/Users/aniln/Documents/bearingHoushingPhotos
-#     directories: C:/Users/aniln/Documents/bearingHoushingPhotos
-
 
 report:
   base-dir: C:/Reports

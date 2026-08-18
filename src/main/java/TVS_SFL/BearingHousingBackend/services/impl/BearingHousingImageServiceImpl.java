@@ -68,9 +68,9 @@ public class BearingHousingImageServiceImpl implements BearingHousingImageServic
     private final BearingHousingImageRepository repository;
     private final FilePathConfig filePathConfig;
 
-    // ====================================================================
+   
     // API ENDPOINT PATHS - Accessible to clients
-    // ====================================================================
+    
     
     /** Base URL for image endpoints: /api/bearing-housing/image/{fileName} */
     private static final String IMAGE_BASE_URL = "/api/bearing-housing/image";
@@ -78,9 +78,8 @@ public class BearingHousingImageServiceImpl implements BearingHousingImageServic
     /** Base URL for PDF endpoints: /api/bearing-housing/pdf/{fileName} */
     private static final String PDF_BASE_URL = "/api/bearing-housing/pdf";
 
-    // ====================================================================
-    // FILE NAMING PATTERNS & CONSTANTS
-    // ====================================================================
+    
+    // FILE NAMING PATTERNS & CONSTANTS  
     
     /** File name pattern for images: BARCODE_PROCESS_SHIFT_STATUS_DATE.jpeg */
     private static final String IMAGE_FILE_EXTENSION = ".jpeg";
@@ -89,31 +88,12 @@ public class BearingHousingImageServiceImpl implements BearingHousingImageServic
     private static final String PDF_FILE_EXTENSION = ".pdf";
     
     /** Prefix for shift directory naming in archives */
-    private static final String SHIFT_PREFIX = "Shift";
-    
-    /** Status code for "Before Glue" images */
-    private static final String STATUS_BEFORE = "B";
-    
-    /** Status code for "After Glue" images */
-    private static final String STATUS_AFTER = "A";
+    private static final String SHIFT_PREFIX = "Shift";  
 
-    // ====================================================================
+
+    
     // PUBLIC METHODS - Service Interface Implementation
-    // ====================================================================
-
-    /**
-     * IMPLEMENTS: BearingHousingImageService.getData(String barcode)
-     * 
-     * Retrieves complete production data with image and PDF URLs.
-     * Organizes results by process (P1, P2) and image type (before/after).
-     * 
-     * Performance: O(1) - single DB query + string operations
-     * Thread-Safe: Yes
-     * 
-     * @param barcode unique bearing housing identifier
-     * @return complete image response with all media URLs
-     * @throws RuntimeException if barcode not found
-     */
+    
     @Override
     public BearingHousingDataToImageResponse getData(String barcode) {
         logger.debug("getData() - Fetching data for barcode: {}", barcode);
@@ -147,16 +127,7 @@ public class BearingHousingImageServiceImpl implements BearingHousingImageServic
         return response;
     }
 
-    /**
-     * IMPLEMENTS: BearingHousingImageService.getImageFile(String fileName)
-     * 
-     * Serves image file with proper headers and caching directives.
-     * Handles both live and archived files.
-     * 
-     * @param fileName the image file to serve (must end with supported extension)
-     * @return ResponseEntity with image data and headers
-     * @throws IOException if file I/O fails
-     */
+    
     @Override
     public ResponseEntity<Resource> getImageFile(String fileName) throws IOException {
         logger.debug("getImageFile() - Requested: {}", fileName);
@@ -185,16 +156,7 @@ public class BearingHousingImageServiceImpl implements BearingHousingImageServic
         return buildImageResponse(fileContent, fileName, mimeType);
     }
 
-    /**
-     * IMPLEMENTS: BearingHousingImageService.getPdfFile(String fileName)
-     * 
-     * Serves PDF file with inline display and CORS headers.
-     * Handles both live and archived files.
-     * 
-     * @param fileName the PDF file to serve (must end with .pdf)
-     * @return ResponseEntity with PDF data and headers
-     * @throws IOException if file I/O fails
-     */
+   
     @Override
     public ResponseEntity<Resource> getPdfFile(String fileName) throws IOException {
         logger.debug("getPdfFile() - Requested: {}", fileName);
@@ -221,15 +183,7 @@ public class BearingHousingImageServiceImpl implements BearingHousingImageServic
         return buildPdfResponse(fileContent, fileName);
     }
 
-    /**
-     * IMPLEMENTS: BearingHousingImageService.isFileArchived(LocalDateTime)
-     * 
-     * Determines if a file should be served from archive storage.
-     * Archive threshold: 90 days old
-     * 
-     * @param productionDateTime the production date to check
-     * @return true if older than 90 days (should be archived)
-     */
+    
     @Override
     public boolean isFileArchived(LocalDateTime productionDateTime) {
         if (productionDateTime == null) {

@@ -7,7 +7,6 @@ import TVS_SFL.BearingHousingBackend.exceptions.ResourceNotFoundException;
 import TVS_SFL.BearingHousingBackend.services.BearingHousingProductionDataService;
 import TVS_SFL.BearingHousingBackend.dto.PaginatedResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
@@ -21,11 +20,11 @@ public class BearingHousingProductionDataController {
     @Autowired
     private BearingHousingProductionDataService productionDataService;
 
-   // Photo storage configuration
-    @Value("${bearinghousing.photos.directory:photos}")
-    private String photoStorageDirectory;
-    @Value("${bearinghousing.photos.directories:}")
-    private String photoStorageDirectories;
+//    // Photo storage configuration
+//     @Value("${bearinghousing.photos.directory:photos}")
+//     private String photoStorageDirectory;
+//     @Value("${bearinghousing.photos.directories:}")
+//     private String photoStorageDirectories;
 
     /**     * Get all production data     */
     @GetMapping(BearingHousingConstants.GET_ALL_ENDPOINT)

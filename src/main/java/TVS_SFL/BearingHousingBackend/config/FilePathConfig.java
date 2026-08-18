@@ -1,6 +1,5 @@
 package TVS_SFL.BearingHousingBackend.config;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -16,25 +15,7 @@ import java.nio.file.Paths;
  */
 @Component
 public class FilePathConfig {
-    
-    // APPLICATION PROPERTIES (from application.yaml)       
-    /**
-     * Primary photo storage directory.
-     * Default: photos
-     * Environment Variable: PHOTO_STORAGE_DIR
-     */
-    @Value("${bearinghousing.photos.directory:photos}")
-    private String photoStorageDirectory;
-
-    /**
-     * Additional photo storage directories (comma-separated).
-     * Default: empty string
-     * Environment Variable: PHOTO_STORAGE_DIRS
-     */
-    @Value("${bearinghousing.photos.directories:}")
-    private String photoStorageDirectories;
-
-    // ====================================================================
+        
     // FILE SYSTEM PATHS - HARDCODED DEFAULTS FOR DEVELOPMENT
     // ====================================================================
     // NOTE: These paths should ideally be moved to application.yaml
@@ -49,20 +30,16 @@ public class FilePathConfig {
     /** Live graphs/reports storage directory */
     private static final String LIVE_GRAPH_ROOT = "C:/BearingHousingGraphs";
 
-    // ====================================================================
-    // ARCHIVE CONFIGURATION
-    // ====================================================================
     
+    // ARCHIVE CONFIGURATION    
     /** Files older than this threshold (days) are moved to archive */
     private static final int ARCHIVE_THRESHOLD_DAYS = 90;
     
     /** Directory prefix for shift-based organization in archive */
     private static final String SHIFT_DIRECTORY_PREFIX = "Shift";
 
-    // ====================================================================
-    // FILE TYPE CONFIGURATION
-    // ====================================================================
     
+    // FILE TYPE CONFIGURATION    
     /** Supported image file extensions (case-insensitive) */
     private static final String[] SUPPORTED_IMAGE_EXTENSIONS = {
         ".jpeg", ".jpg", ".png", ".gif", ".bmp", ".webp"
@@ -74,8 +51,7 @@ public class FilePathConfig {
     };
 
     
-    // CACHE CONTROL CONFIGURATION    
-    
+    // CACHE CONTROL CONFIGURATION     
     /** Cache control header for static files */
     private static final String CACHE_CONTROL_NO_CACHE = 
         "no-cache, no-store, must-revalidate";
@@ -106,21 +82,7 @@ public class FilePathConfig {
      */
     public Path getLiveGraphRootPath() {
         return Paths.get(LIVE_GRAPH_ROOT);
-    }
-
-    /** Get the photo storage directory from properties.
-     * @return String path from application properties
-     */
-    public String getPhotoStorageDirectory() {
-        return photoStorageDirectory;
-    }
-
-    /** Get additional photo storage directories.
-     * @return Comma-separated string of directories
-     */
-    public String getPhotoStorageDirectories() {
-        return photoStorageDirectories;
-    }
+    }    
     
     // PUBLIC ACCESSOR METHODS - Configuration Values
     
@@ -162,23 +124,14 @@ public class FilePathConfig {
         return CACHE_CONTROL_NO_CACHE;
     }
 
-    /** Get cache control header for occasionally-accessed content.
-     * Get cache control header for occasionally-accessed content.
-     * @return cache control directive with 1-hour max-age
-     */
+    // Get cache control header for short-term cached content.     
     public String getCacheControlShortTerm() {
         return CACHE_CONTROL_SHORT_TERM;
     }
 
     
     // UTILITY METHODS - File Extension Validation
-
-    /* Check if a file extension is a supported image format.
-     * Case-insensitive comparison.
-     * 
-     * @param fileName the file name to check
-     * @return true if file is a supported image format
-     */
+    
     public boolean isImageFile(String fileName) {
         if (fileName == null || fileName.isEmpty()) {
             return false;
@@ -192,12 +145,7 @@ public class FilePathConfig {
         return false;
     }
 
-    /** Check if a file extension is a supported document format.
-     *  Case-insensitive comparison.
-     * 
-     * @param fileName the file name to check
-     * @return true if file is a supported document format
-     */
+    
     public boolean isDocumentFile(String fileName) {
         if (fileName == null || fileName.isEmpty()) {
             return false;
@@ -210,14 +158,7 @@ public class FilePathConfig {
         }
         return false;
     }
-
-    /**
-     * Get the MIME type for a given file.
-     * Supports images and common document formats.
-     * 
-     * @param fileName the file name
-     * @return MIME type string (e.g., "image/jpeg", "application/pdf")
-     */
+   
     public String getMimeType(String fileName) {
         if (fileName == null) {
             return "application/octet-stream";
@@ -254,11 +195,7 @@ public class FilePathConfig {
     } 
 
     // UTILITY METHODS - Path Building    
-    /**
-     * Extract the file extension from a filename (including the dot).     * 
-     * @param fileName the file name
-     * @return file extension (e.g., ".jpg") or empty string if none
-     */
+    
     public String getFileExtension(String fileName) {
         if (fileName == null || fileName.isEmpty()) {
             return "";
@@ -270,10 +207,7 @@ public class FilePathConfig {
         return "";
     }
 
-    /** Extract the file name without extension. 
-     * @param fileName the full file name
-     * @return file name without extension
-     */
+    // Extract the file name without extension.    
     public String getFileNameWithoutExtension(String fileName) {
         if (fileName == null || fileName.isEmpty()) {
             return "";
