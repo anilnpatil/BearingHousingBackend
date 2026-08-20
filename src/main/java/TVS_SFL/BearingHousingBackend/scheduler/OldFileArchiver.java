@@ -7,7 +7,6 @@ import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -87,32 +86,6 @@ public class OldFileArchiver {
         System.out.println("Old file archive migration completed.");
     }
 
-    private Set<String> buildExpectedFileNames(BearingHousingProductionData data) {
-        String date = String.format("%02d%02d%02d",
-                data.getProductionDateTime().getDayOfMonth(),
-                data.getProductionDateTime().getMonthValue(),
-                data.getProductionDateTime().getYear() % 100);
-
-        String shift = "S" + data.getShift();
-        String barcode = data.getBarcode();
-
-        Set<String> fileNames = Set.of(
-                barcode + "_P1_" + (data.getP1_beforeGlueStatus() == 1 ? "BK" : "BN") + "_" + shift + "-" + date + ".jpeg",
-                barcode + "_P1_" + (data.getP1_afterGlueStatus() == 1 ? "AK" : "AN") + "_" + shift + "-" + date + ".jpeg",
-                barcode + "_P1_" + shift + "-" + date + ".pdf"
-        );
-
-        if (data.getNumberofProcess() != null && data.getNumberofProcess() >= 2) {
-            return Stream.concat(fileNames.stream(), Stream.of(
-                    barcode + "_P2_" + (data.getP2_beforeGlueStatus() == 1 ? "BK" : "BN") + "_" + shift + "-" + date + ".jpeg",
-                    barcode + "_P2_" + (data.getP2_afterGlueStatus() == 1 ? "AK" : "AN") + "_" + shift + "-" + date + ".jpeg",
-                    barcode + "_P2_" + shift + "-" + date + ".pdf"
-            )).collect(Collectors.toSet());
-        }
-
-        return fileNames;
-    }
-
     private void archivePath(Path file, Map<String, BearingHousingProductionData> oldRecordByBarcode) {
         String fileName = file.getFileName().toString();
         String barcode = extractBarcode(fileName);
@@ -140,7 +113,8 @@ public class OldFileArchiver {
 
     private Path buildArchiveFolder(BearingHousingProductionData data, String fileName) {
         LocalDate productionDate = data.getProductionDateTime().toLocalDate();
-        String shiftFolder = shiftPrefix + data.getShift();
+        Integer fileShift = extractShift(fileName);
+        String shiftFolder = shiftPrefix + (fileShift != null ? fileShift : data.getShift());
         String year = String.format("%04d", productionDate.getYear());
         String month = String.format("%02d", productionDate.getMonthValue());
         String day = String.format("%02d", productionDate.getDayOfMonth());
@@ -152,6 +126,23 @@ public class OldFileArchiver {
                 .resolve(day)
                 .resolve(data.getBarcode())
                 .resolve(fileName);
+    }
+
+    private Integer extractShift(String fileName) {
+        if (fileName == null || fileName.isBlank()) {
+            return null;
+        }
+
+        for (String part : fileName.split("_")) {
+            if (part.length() > 1 && (part.charAt(0) == 'S' || part.charAt(0) == 's')) {
+                try {
+                    return Integer.valueOf(part.substring(1));
+                } catch (NumberFormatException ignored) {
+                    return null;
+                }
+            }
+        }
+        return null;
     }
 
     private String extractBarcode(String fileName) {

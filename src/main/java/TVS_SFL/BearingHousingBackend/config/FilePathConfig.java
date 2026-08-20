@@ -2,8 +2,6 @@ package TVS_SFL.BearingHousingBackend.config;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Locale;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 

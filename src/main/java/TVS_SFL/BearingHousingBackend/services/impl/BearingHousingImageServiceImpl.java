@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -406,12 +407,12 @@ public class BearingHousingImageServiceImpl implements BearingHousingImageServic
 
         // Check if file should be served from archive
         if (isFileArchived(productionData.getProductionDateTime())) {
-            Path archivePath = buildArchivePath(productionData, fileName);
-            if (Files.exists(archivePath)) {
+            Path archivePath = findInArchiveStorage(productionData, fileName);
+            if (archivePath != null) {
                 logger.debug("resolveFilePath() - Found in archive: {}", archivePath.toAbsolutePath());
                 return archivePath;
             }
-            logger.warn("resolveFilePath() - Archive path does not exist: {}", archivePath.toAbsolutePath());
+            logger.warn("resolveFilePath() - Archive file does not exist for barcode: {}", productionData.getBarcode());
             return null;
         }
 
@@ -426,6 +427,72 @@ public class BearingHousingImageServiceImpl implements BearingHousingImageServic
         return null;
     }
 
+    private Path findInArchiveStorage(BearingHousingProductionData productionData, String fileName) {
+        Integer fileShift = extractShiftFromFileName(fileName);
+        List<Integer> shifts = new ArrayList<>();
+        if (fileShift != null) {
+            shifts.add(fileShift);
+        }
+        if (productionData.getShift() != null && !shifts.contains(productionData.getShift())) {
+            shifts.add(productionData.getShift());
+        }
+
+        for (Integer shift : shifts) {
+            for (String candidate : getLookupCandidates(fileName)) {
+                Path archivePath = buildArchivePath(productionData, candidate, shift);
+                if (Files.exists(archivePath)) {
+                    return archivePath;
+                }
+            }
+        }
+
+        Path matchingArchivePath = findArchiveFileWithAnyShift(productionData, fileName);
+        if (matchingArchivePath != null) {
+            return matchingArchivePath;
+        }
+        return null;
+    }
+
+    private Path findArchiveFileWithAnyShift(BearingHousingProductionData data, String requestedFileName) {
+        Path archiveRoot = filePathConfig.getArchiveRootPath();
+        LocalDate productionDate = data.getProductionDateTime().toLocalDate();
+        String year = String.format("%04d", productionDate.getYear());
+        String month = String.format("%02d", productionDate.getMonthValue());
+        String day = String.format("%02d", productionDate.getDayOfMonth());
+
+        try (Stream<Path> shiftFolders = Files.list(archiveRoot)) {
+            return shiftFolders
+                .filter(Files::isDirectory)
+                .filter(path -> path.getFileName().toString().matches("(?i)" + SHIFT_PREFIX + "\\d+"))
+                .map(path -> path.resolve(year).resolve(month).resolve(day).resolve(data.getBarcode()))
+                .filter(Files::isDirectory)
+                .flatMap(this::listFilesSafely)
+                .filter(path -> fileNamesMatchIgnoringShift(path.getFileName().toString(), requestedFileName))
+                .findFirst()
+                .orElse(null);
+        } catch (IOException ex) {
+            logger.warn("findArchiveFileWithAnyShift() - Unable to inspect archive for barcode: {}", data.getBarcode(), ex);
+            return null;
+        }
+    }
+
+    private Stream<Path> listFilesSafely(Path directory) {
+        try {
+            return Files.list(directory).filter(Files::isRegularFile);
+        } catch (IOException ex) {
+            return Stream.empty();
+        }
+    }
+
+    private boolean fileNamesMatchIgnoringShift(String actualFileName, String requestedFileName) {
+        return normalizeArchiveFileName(actualFileName).equalsIgnoreCase(normalizeArchiveFileName(requestedFileName));
+    }
+
+    private String normalizeArchiveFileName(String fileName) {
+        String normalized = fileName.replaceFirst("(?i)(\\.[a-z0-9]+)\\1$", "$1");
+        return normalized.replaceFirst("(?i)_S\\d+_", "_S#_");
+    }
+
     /**
      * Build archive file path based on production date and shift.
      * Archive Structure: ARCHIVE_ROOT/ShiftN/YYYY/MM/DD/BARCODE/fileName
@@ -434,9 +501,10 @@ public class BearingHousingImageServiceImpl implements BearingHousingImageServic
      * @param fileName the file name
      * @return Path to archive file
      */
-    private Path buildArchivePath(BearingHousingProductionData data, String fileName) {
+    private Path buildArchivePath(BearingHousingProductionData data, String fileName, Integer fileShift) {
         LocalDate productionDate = data.getProductionDateTime().toLocalDate();
-        String shiftFolder = SHIFT_PREFIX + data.getShift();
+        Integer shift = fileShift != null ? fileShift : data.getShift();
+        String shiftFolder = SHIFT_PREFIX + shift;
         String year = String.format("%04d", productionDate.getYear());
         String month = String.format("%02d", productionDate.getMonthValue());
         String day = String.format("%02d", productionDate.getDayOfMonth());
@@ -448,6 +516,23 @@ public class BearingHousingImageServiceImpl implements BearingHousingImageServic
             .resolve(day)
             .resolve(data.getBarcode())
             .resolve(fileName);
+    }
+
+    private Integer extractShiftFromFileName(String fileName) {
+        if (fileName == null || fileName.isBlank()) {
+            return null;
+        }
+
+        for (String part : fileName.split("_")) {
+            if (part.length() > 1 && (part.charAt(0) == 'S' || part.charAt(0) == 's')) {
+                try {
+                    return Integer.valueOf(part.substring(1));
+                } catch (NumberFormatException ignored) {
+                    return null;
+                }
+            }
+        }
+        return null;
     }
 
     /**
