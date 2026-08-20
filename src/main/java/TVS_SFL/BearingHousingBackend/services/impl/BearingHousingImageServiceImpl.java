@@ -5,6 +5,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,37 +26,7 @@ import TVS_SFL.BearingHousingBackend.services.BearingHousingImageService;
 
 import lombok.RequiredArgsConstructor;
 
-/**
- * ========================================================================
- * BEARING HOUSING IMAGE SERVICE IMPLEMENTATION
- * ========================================================================
- * Purpose: Implements business logic for bearing housing image and data
- *          retrieval operations with comprehensive validation and error
- *          handling.
- * 
- * Key Features:
- * - Centralized file path management via FilePathConfig
- * - Secure file serving with validation
- * - Proper MIME type and cache headers
- * - Archived vs. live file routing
- * - Comprehensive logging for debugging
- * 
- * Performance Considerations:
- * - File lookups optimized via barcode-indexed database queries
- * - Archive paths built dynamically (no pre-computation)
- * - Image/PDF URLs cached by HTTP clients (Expires/Cache-Control headers)
- * 
- * Security Considerations:
- * - Barcode validation prevents directory traversal attacks
- * - File extension whitelist prevents arbitrary file access
- * - No-cache headers prevent sensitive data caching in browsers
- * - CORS headers properly configured for cross-origin requests
- * 
- * Thread-Safety: Yes (stateless service, no mutable fields)
- * Database: Requires bearing_housing_production_data table with
- *           barcode indexed for optimal performance
- * ========================================================================
- */
+
 @Service
 @RequiredArgsConstructor
 public class BearingHousingImageServiceImpl implements BearingHousingImageService {
@@ -68,10 +40,7 @@ public class BearingHousingImageServiceImpl implements BearingHousingImageServic
     private final BearingHousingImageRepository repository;
     private final FilePathConfig filePathConfig;
 
-   
-    // API ENDPOINT PATHS - Accessible to clients
-    
-    
+       
     /** Base URL for image endpoints: /api/bearing-housing/image/{fileName} */
     private static final String IMAGE_BASE_URL = "/api/bearing-housing/image";
     
@@ -89,8 +58,6 @@ public class BearingHousingImageServiceImpl implements BearingHousingImageServic
     
     /** Prefix for shift directory naming in archives */
     private static final String SHIFT_PREFIX = "Shift";  
-
-
     
     // PUBLIC METHODS - Service Interface Implementation
     
@@ -491,19 +458,42 @@ public class BearingHousingImageServiceImpl implements BearingHousingImageServic
      * @return Path if found, null otherwise
      */
     private Path findInLiveStorage(String fileName) {
-        // Check live images directory
-        Path imageFile = filePathConfig.getLiveImageRootPath().resolve(fileName);
-        if (Files.exists(imageFile)) {
-            return imageFile;
-        }
+        for (String candidate : getLookupCandidates(fileName)) {
+            // Check live images directory
+            Path imageFile = filePathConfig.getLiveImageRootPath().resolve(candidate);
+            if (Files.exists(imageFile)) {
+                return imageFile;
+            }
 
-        // Check live graphs directory
-        Path graphFile = filePathConfig.getLiveGraphRootPath().resolve(fileName);
-        if (Files.exists(graphFile)) {
-            return graphFile;
+            // Check live graphs directory
+            Path graphFile = filePathConfig.getLiveGraphRootPath().resolve(candidate);
+            if (Files.exists(graphFile)) {
+                return graphFile;
+            }
         }
 
         return null;
+    }
+
+    public static List<String> getLookupCandidates(String fileName) {
+        if (fileName == null || fileName.isBlank()) {
+            return List.of();
+        }
+
+        List<String> candidates = new ArrayList<>();
+        String normalized = fileName.trim();
+        candidates.add(normalized);
+
+        String lower = normalized.toLowerCase();
+        for (String extension : List.of(".jpeg", ".jpg", ".png", ".gif", ".bmp", ".webp", ".pdf")) {
+            if (lower.endsWith(extension)) {
+                String baseName = normalized.substring(0, normalized.length() - extension.length());
+                candidates.add(baseName + extension + extension);
+                break;
+            }
+        }
+
+        return candidates;
     }
 
     /**

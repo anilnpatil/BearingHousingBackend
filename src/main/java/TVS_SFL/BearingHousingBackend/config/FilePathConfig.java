@@ -1,8 +1,11 @@
 package TVS_SFL.BearingHousingBackend.config;
 
-import org.springframework.stereotype.Component;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Locale;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 /**
  * ========================================================================
@@ -15,91 +18,106 @@ import java.nio.file.Paths;
  */
 @Component
 public class FilePathConfig {
-        
-    // FILE SYSTEM PATHS - HARDCODED DEFAULTS FOR DEVELOPMENT
-    // ====================================================================
-    // NOTE: These paths should ideally be moved to application.yaml
-    // for production deployments. Hardcoded values are for local development.
-    
-    /** Archive root directory for files older than 90 days */
-    private static final String ARCHIVE_ROOT = "C:/BearingHousingOldFiles";
-    
-    /** Live images storage directory (Station IV-4) */
-    private static final String LIVE_IMAGE_ROOT = "C:/BearingHousingImages/IV-4";
-    
-    /** Live graphs/reports storage directory */
-    private static final String LIVE_GRAPH_ROOT = "C:/BearingHousingGraphs";
 
-    
-    // ARCHIVE CONFIGURATION    
-    /** Files older than this threshold (days) are moved to archive */
-    private static final int ARCHIVE_THRESHOLD_DAYS = 90;
-    
-    /** Directory prefix for shift-based organization in archive */
-    private static final String SHIFT_DIRECTORY_PREFIX = "Shift";
+    @Value("${file.archive-root}")
+    private String archiveRoot;
 
-    
-    // FILE TYPE CONFIGURATION    
+    @Value("${file.live-image-root}")
+    private String liveImageRoot;
+
+    @Value("${file.live-graph-root}")
+    private String liveGraphRoot;
+
+    @Value("${file.archive-threshold-days}")
+    private int archiveThresholdDays;
+
+    @Value("${file.shift-prefix}")
+    private String shiftDirectoryPrefix;
+
+    // FILE TYPE CONFIGURATION
     /** Supported image file extensions (case-insensitive) */
     private static final String[] SUPPORTED_IMAGE_EXTENSIONS = {
         ".jpeg", ".jpg", ".png", ".gif", ".bmp", ".webp"
     };
-    
+
     /** Supported document file extensions (case-insensitive) */
     private static final String[] SUPPORTED_DOCUMENT_EXTENSIONS = {
         ".pdf", ".doc", ".docx", ".xls", ".xlsx"
     };
 
-    
-    // CACHE CONTROL CONFIGURATION     
+    // CACHE CONTROL CONFIGURATION
     /** Cache control header for static files */
-    private static final String CACHE_CONTROL_NO_CACHE = 
+    private static final String CACHE_CONTROL_NO_CACHE =
         "no-cache, no-store, must-revalidate";
-    
+
     /** Cache control header for occasionally-accessed files */
-    private static final String CACHE_CONTROL_SHORT_TERM = 
+    private static final String CACHE_CONTROL_SHORT_TERM =
         "public, max-age=3600";
 
-    
-    // PUBLIC ACCESSOR METHODS - Path Resolution 
+    // PUBLIC ACCESSOR METHODS - Path Resolution
 
     /** Get the archive root path object.
      * @return Path object pointing to archive directory
      */
     public Path getArchiveRootPath() {
-        return Paths.get(ARCHIVE_ROOT);
+        return toPath(archiveRoot);
     }
 
     /** Get the live images root path object.
      * @return Path object pointing to live images directory
      */
     public Path getLiveImageRootPath() {
-        return Paths.get(LIVE_IMAGE_ROOT);
+        return toPath(liveImageRoot);
     }
 
     /** Get the live graphs root path object.
      * @return Path object pointing to live graphs directory
      */
     public Path getLiveGraphRootPath() {
-        return Paths.get(LIVE_GRAPH_ROOT);
-    }    
-    
+        return toPath(liveGraphRoot);
+    }
+
+    public static Path toPath(String pathValue) {
+        return Paths.get(normalizePathString(pathValue));
+    }
+
+    public static String normalizePathString(String pathValue) {
+        if (pathValue == null || pathValue.isBlank()) {
+            return "";
+        }
+
+        String normalized = pathValue.trim().replace('\\', '/');
+
+        if (normalized.matches("^[A-Za-z]:/.*")) {
+            return normalized;
+        }
+
+        if (normalized.startsWith("//")) {
+            return normalized;
+        }
+
+        if (normalized.startsWith("/")) {
+            return normalized;
+        }
+
+        return normalized;
+    }
+
     // PUBLIC ACCESSOR METHODS - Configuration Values
-    
 
     /** Get the archive threshold in days.
      * Files older than this are considered archived.
      * @return number of days (default: 90)
      */
     public int getArchiveThresholdDays() {
-        return ARCHIVE_THRESHOLD_DAYS;
+        return archiveThresholdDays;
     }
 
     /** Get the shift directory prefix used in archive structure.
      * @return prefix string (default: "Shift")
      */
     public String getShiftDirectoryPrefix() {
-        return SHIFT_DIRECTORY_PREFIX;
+        return shiftDirectoryPrefix;
     }
 
     /** Get supported image file extensions.

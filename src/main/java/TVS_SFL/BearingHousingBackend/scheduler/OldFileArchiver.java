@@ -11,9 +11,11 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import TVS_SFL.BearingHousingBackend.config.FilePathConfig;
 import TVS_SFL.BearingHousingBackend.entities.BearingHousingProductionData;
 import TVS_SFL.BearingHousingBackend.repositories.BearingHousingImageRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,14 +25,20 @@ import jakarta.annotation.PostConstruct;
 @RequiredArgsConstructor
 public class OldFileArchiver {
 
-        private static final Path ARCHIVE_ROOT =
-            Path.of("C:/BearingHousingOldFiles");
-    private static final List<Path> LIVE_ROOTS = List.of(
-            Path.of("C:/BearingHousingImages/IV-4"),
-            Path.of("C:/BearingHousingGraphs")
-    );
-    private static final String SHIFT_PREFIX = "Shift";
-    private static final int ARCHIVE_DAYS = 90;
+    @Value("${file.archive-root}")
+    private String archiveRoot;
+
+    @Value("${file.live-image-root}")
+    private String liveImageRoot;
+
+    @Value("${file.live-graph-root}")
+    private String liveGraphRoot;
+
+    @Value("${file.shift-prefix}")
+    private String shiftPrefix;
+
+    @Value("${file.archive-threshold-days}")
+    private int archiveDays;
 
     private final BearingHousingImageRepository repository;
 
@@ -41,9 +49,9 @@ public class OldFileArchiver {
     }
 
     //@Scheduled(cron = "0 15 0 * * *")
-    @Scheduled(cron = "0 45 17 * * *")
+    @Scheduled(cron = "0 53 16 * * *")
     public void moveOldFilesToArchive() {
-        LocalDate cutoff = LocalDate.now().minusDays(ARCHIVE_DAYS);
+        LocalDate cutoff = LocalDate.now().minusDays(archiveDays);
         List<BearingHousingProductionData> oldRecords = repository.findProductionDataOlderThan(cutoff);
 
         if (oldRecords == null || oldRecords.isEmpty()) {
@@ -54,8 +62,13 @@ public class OldFileArchiver {
         Map<String, BearingHousingProductionData> oldRecordByBarcode = oldRecords.stream()
                 .collect(Collectors.toMap(BearingHousingProductionData::getBarcode, data -> data));
 
+        List<Path> liveRoots = List.of(
+                FilePathConfig.toPath(liveImageRoot),
+                FilePathConfig.toPath(liveGraphRoot)
+        );
+
         // For each live root, find files whose filename starts with a barcode of an old record
-        for (Path liveRoot : LIVE_ROOTS) {
+        for (Path liveRoot : liveRoots) {
             try (Stream<Path> entries = Files.walk(liveRoot)) {
                 entries.filter(Files::isRegularFile)
                         .filter(path -> isSupportedFile(path.getFileName().toString()))
@@ -127,12 +140,13 @@ public class OldFileArchiver {
 
     private Path buildArchiveFolder(BearingHousingProductionData data, String fileName) {
         LocalDate productionDate = data.getProductionDateTime().toLocalDate();
-        String shiftFolder = SHIFT_PREFIX + data.getShift();
+        String shiftFolder = shiftPrefix + data.getShift();
         String year = String.format("%04d", productionDate.getYear());
         String month = String.format("%02d", productionDate.getMonthValue());
         String day = String.format("%02d", productionDate.getDayOfMonth());
 
-        return ARCHIVE_ROOT.resolve(shiftFolder)
+        return FilePathConfig.toPath(archiveRoot)
+                .resolve(shiftFolder)
                 .resolve(year)
                 .resolve(month)
                 .resolve(day)
