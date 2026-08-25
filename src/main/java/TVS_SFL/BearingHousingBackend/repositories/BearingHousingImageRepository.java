@@ -93,8 +93,8 @@ public class BearingHousingImageRepository {
 
         data.setCycleTime(rs.getFloat("cycle_time"));
         data.setP1_beforeGlueStatus(rs.getInt("p1_before_glue_status"));
-        data.setP1_toxLoadMax(rs.getFloat("p1_tox_load_max"));
-        data.setP1_toxLoadMin(rs.getFloat("p1_tox_load_min"));
+        // data.setP1_toxLoadMax(rs.getFloat("p1_tox_load_max"));
+        // data.setP1_toxLoadMin(rs.getFloat("p1_tox_load_min"));
         data.setP1_toxLoadActual(rs.getFloat("p1_tox_load_actual"));
         data.setP1_toxDisplacementMax(rs.getFloat("p1_tox_displacement_max"));
         data.setP1_toxDisplacementMin(rs.getFloat("p1_tox_displacement_min"));
@@ -103,8 +103,8 @@ public class BearingHousingImageRepository {
         data.setP1_graphStatus(rs.getInt("p1_graph_status"));
 
         data.setP2_beforeGlueStatus(rs.getInt("p2_before_glue_status"));
-        data.setP2_toxLoadMax(rs.getFloat("p2_tox_load_max"));
-        data.setP2_toxLoadMin(rs.getFloat("p2_tox_load_min"));
+        // data.setP2_toxLoadMax(rs.getFloat("p2_tox_load_max"));
+        // data.setP2_toxLoadMin(rs.getFloat("p2_tox_load_min"));
         data.setP2_toxLoadActual(rs.getFloat("p2_tox_load_actual"));
         data.setP2_toxDisplacementMax(rs.getFloat("p2_tox_displacement_max"));
         data.setP2_toxDisplacementMin(rs.getFloat("p2_tox_displacement_min"));

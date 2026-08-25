@@ -39,8 +39,8 @@ report:
   base-dir: C:/Reports
 
 file:
-  archive-root: D:\BearingHousingOldFiles
-  live-image-root: E:/BearingHousingImages/IV-4
-  live-graph-root: E:/BearingHousingGraphs
+  archive-root: C:\BearingHousingOldFiles
+  live-image-root: C:\BearingHousingImages\IV-4
+  live-graph-root: C:\BearingHousingGraphs
   archive-threshold-days: 90
   shift-prefix: Shift

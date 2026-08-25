@@ -23,8 +23,8 @@ public class BearingHousingMapper {
         dto.setNumberofProcess(entity.getNumberofProcess());
         dto.setP1_beforeGlueStatus(entity.getP1_beforeGlueStatus());
         dto.setP1_afterGlueStatus(entity.getP1_afterGlueStatus());
-        dto.setP1_toxLoadMax(entity.getP1_toxLoadMax());
-        dto.setP1_toxLoadMin(entity.getP1_toxLoadMin());
+        // dto.setP1_toxLoadMax(entity.getP1_toxLoadMax());
+        // dto.setP1_toxLoadMin(entity.getP1_toxLoadMin());
         dto.setP1_toxLoadActual(entity.getP1_toxLoadActual());
         dto.setP1_toxDisplacementMax(entity.getP1_toxDisplacementMax());
         dto.setP1_toxDisplacementMin(entity.getP1_toxDisplacementMin());
@@ -32,8 +32,8 @@ public class BearingHousingMapper {
         dto.setP1_graphStatus(entity.getP1_graphStatus());
         dto.setP2_beforeGlueStatus(entity.getP2_beforeGlueStatus());
         dto.setP2_afterGlueStatus(entity.getP2_afterGlueStatus());
-        dto.setP2_toxLoadMax(entity.getP2_toxLoadMax());
-        dto.setP2_toxLoadMin(entity.getP2_toxLoadMin());
+        // dto.setP2_toxLoadMax(entity.getP2_toxLoadMax());
+        // dto.setP2_toxLoadMin(entity.getP2_toxLoadMin());
         dto.setP2_toxLoadActual(entity.getP2_toxLoadActual());
         dto.setP2_toxDisplacementMax(entity.getP2_toxDisplacementMax());
         dto.setP2_toxDisplacementMin(entity.getP2_toxDisplacementMin());
@@ -66,8 +66,8 @@ public class BearingHousingMapper {
         entity.setNumberofProcess(dto.getNumberofProcess());
         entity.setP1_beforeGlueStatus(dto.getP1_beforeGlueStatus());
         entity.setP1_afterGlueStatus(dto.getP1_afterGlueStatus());
-        entity.setP1_toxLoadMax(dto.getP1_toxLoadMax());
-        entity.setP1_toxLoadMin(dto.getP1_toxLoadMin());
+        // entity.setP1_toxLoadMax(dto.getP1_toxLoadMax());
+        // entity.setP1_toxLoadMin(dto.getP1_toxLoadMin());
         entity.setP1_toxLoadActual(dto.getP1_toxLoadActual());
         entity.setP1_toxDisplacementMax(dto.getP1_toxDisplacementMax());
         entity.setP1_toxDisplacementMin(dto.getP1_toxDisplacementMin());
@@ -75,8 +75,8 @@ public class BearingHousingMapper {
         entity.setP1_graphStatus(dto.getP1_graphStatus());
         entity.setP2_beforeGlueStatus(dto.getP2_beforeGlueStatus());
         entity.setP2_afterGlueStatus(dto.getP2_afterGlueStatus());
-        entity.setP2_toxLoadMax(dto.getP2_toxLoadMax());
-        entity.setP2_toxLoadMin(dto.getP2_toxLoadMin());
+        // entity.setP2_toxLoadMax(dto.getP2_toxLoadMax());
+        // entity.setP2_toxLoadMin(dto.getP2_toxLoadMin());
         entity.setP2_toxLoadActual(dto.getP2_toxLoadActual());
         entity.setP2_toxDisplacementMax(dto.getP2_toxDisplacementMax());
         entity.setP2_toxDisplacementMin(dto.getP2_toxDisplacementMin());

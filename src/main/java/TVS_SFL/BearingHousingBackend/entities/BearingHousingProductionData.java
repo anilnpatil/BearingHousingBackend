@@ -40,11 +40,11 @@ public class BearingHousingProductionData {
     @Column(name = "p1_after_glue_status")
     private Integer p1_afterGlueStatus;
     
-    @Column(name = "p1_tox_load_max")
-    private Float p1_toxLoadMax;
+    // @Column(name = "p1_tox_load_max")
+    // private Float p1_toxLoadMax;
 
-    @Column(name = "p1_tox_load_min")
-    private Float p1_toxLoadMin;
+    // @Column(name = "p1_tox_load_min")
+    // private Float p1_toxLoadMin;
 
     @Column(name = "p1_tox_load_actual")
     private Float p1_toxLoadActual;
@@ -67,11 +67,11 @@ public class BearingHousingProductionData {
     @Column(name = "p2_after_glue_status")
     private Integer p2_afterGlueStatus;
 
-    @Column(name = "p2_tox_load_max")
-    private Float p2_toxLoadMax;
+    // @Column(name = "p2_tox_load_max")
+    // private Float p2_toxLoadMax;
 
-    @Column(name = "p2_tox_load_min")
-    private Float p2_toxLoadMin;
+    // @Column(name = "p2_tox_load_min")
+    // private Float p2_toxLoadMin;
 
     @Column(name = "p2_tox_load_actual")
     private Float p2_toxLoadActual;
@@ -98,10 +98,7 @@ public class BearingHousingProductionData {
     private Integer notOkCount;
     
     @Column(name = "total_part_count")
-    private Integer totalPartCount;    
-
-    // @Column(name = "cycle_end_time")
-    // private LocalDateTime cycleEndTime;
+    private Integer totalPartCount;        
 
     @Column(name = "cycle_time")
     private Float cycleTime;
@@ -111,6 +108,6 @@ public class BearingHousingProductionData {
     
     
 
-    // Getters and Setters used lombok annotations @Getter and @Setter, so no need to manually define them.
+    // Getters and Setters used lombok annotations @Getter and @Setter
     
 }
