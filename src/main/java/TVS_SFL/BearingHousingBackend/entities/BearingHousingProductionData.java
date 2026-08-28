@@ -104,8 +104,7 @@ public class BearingHousingProductionData {
     private Float cycleTime;
 
     @Column(name = "production_date_time")
-    private LocalDateTime productionDateTime;
-    
+    private LocalDateTime productionDateTime;   
     
 
     // Getters and Setters used lombok annotations @Getter and @Setter
