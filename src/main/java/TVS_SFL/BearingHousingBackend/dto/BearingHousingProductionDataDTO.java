@@ -1,6 +1,7 @@
 package TVS_SFL.BearingHousingBackend.dto;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,7 +17,7 @@ public class BearingHousingProductionDataDTO {
 
     private Long id;    
     private String barcode;    
-    private LocalDateTime cycleStartTime;    
+    private LocalTime cycleStartTime;    
     private LocalDateTime cycleEndTime;    
     private Float cycleTime;    
     private LocalDateTime productionDateTime;    

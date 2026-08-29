@@ -83,7 +83,7 @@ public class BearingHousingImageRepository {
 
         Timestamp cycleStartTime = rs.getTimestamp("cycle_start_time");
         if (cycleStartTime != null) {
-            data.setCycleStartTime(cycleStartTime.toLocalDateTime());
+            data.setCycleStartTime(cycleStartTime.toLocalDateTime().toLocalTime());
         }
 
         Timestamp productionTime = rs.getTimestamp("production_date_time");

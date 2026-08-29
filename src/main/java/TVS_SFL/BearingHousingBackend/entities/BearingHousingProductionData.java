@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Getter
 @Setter
@@ -32,7 +33,7 @@ public class BearingHousingProductionData {
     private Integer numberofProcess;
 
     @Column(name = "cycle_start_time")
-    private LocalDateTime cycleStartTime;            
+    private LocalTime cycleStartTime;            
     
     @Column(name = "p1_before_glue_status")
     private Integer p1_beforeGlueStatus;

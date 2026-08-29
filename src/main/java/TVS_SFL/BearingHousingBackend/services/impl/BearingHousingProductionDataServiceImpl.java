@@ -47,7 +47,7 @@ public class BearingHousingProductionDataServiceImpl implements BearingHousingPr
 
                 Timestamp cycleStartTs = rs.getTimestamp("cycle_start_time");
                 entity.setCycleStartTime(
-                        cycleStartTs != null ? cycleStartTs.toLocalDateTime() : null);
+                        cycleStartTs != null ? cycleStartTs.toLocalDateTime().toLocalTime() : null);
 
                 // Timestamp cycleEndTs = rs.getTimestamp("cycle_end_time");
                 // entity.setCycleEndTime(
@@ -163,7 +163,7 @@ public class BearingHousingProductionDataServiceImpl implements BearingHousingPr
 
         Timestamp cycleStartTs =
                 entity.getCycleStartTime() != null
-                        ? Timestamp.valueOf(entity.getCycleStartTime())
+                        ? Timestamp.valueOf(java.time.LocalDateTime.of(java.time.LocalDate.of(1970, 1, 1), entity.getCycleStartTime()))
                         : null;
 
         // Timestamp cycleEndTs =
@@ -229,7 +229,7 @@ public class BearingHousingProductionDataServiceImpl implements BearingHousingPr
 
         Timestamp cycleStartTs =
                 entity.getCycleStartTime() != null
-                        ? Timestamp.valueOf(entity.getCycleStartTime())
+                        ? Timestamp.valueOf(java.time.LocalDateTime.of(java.time.LocalDate.of(1970, 1, 1), entity.getCycleStartTime()))
                         : null;
 
         // Timestamp cycleEndTs =
