@@ -102,7 +102,7 @@
 	</dependencies>
 
 	<build>
-		<finalName>BearingHousingBackendServer</finalName>
+		<finalName>BearingHousingBackendService</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>

@@ -26,55 +26,37 @@ import java.util.concurrent.TimeUnit;
 @CrossOrigin(origins = "*")
 public class AngularServiceController {
 
-    // =========================================================
-    // SERVICE CONFIGURATION
-    // =========================================================
-
-    /**
-     * Service registry - Add new services here
-     * Key: service-id (from frontend)
-     * Value: WinSW executable path
-     * 
-     * TODO: Add Spring Boot service path
-     * "spring-boot" -> "C:\\SpringBootService\\SpringBootService.exe"
-     * 
-     * TODO: Add other services as needed
-     */
+    
+    // SERVICE CONFIGURATION 
+    /** * Service registry - Add new services here
+        * Key: service-id (from frontend)  Value: WinSW executable path    
+    */
     private static final Map<String, String> SERVICE_PATHS = Map.of(
-            "angular", "C:\\AngularService\\AngularService.exe",
-            "node-red", "C:\\BearingHousingNoderedService\\BearingHousingNoderedService.exe"
-            // TODO: Add Spring Boot: "spring-boot", "C:\\SpringBootService\\SpringBootService.exe"
+        "angular", "C:\\BearingHousingFrontendServiceCreator\\BearingHousingFrontendService.exe",
+        "node-red", "C:\\BearingHousingNoderedService\\BearingHousingNoderedService.exe",
+        "spring-boot", "C:\\BearingHousingBackendServiceCreator\\SpringBootService.exe"
     );
 
     /**
      * Windows service names used for reliable status queries.
      */
     private static final Map<String, String> WINDOWS_SERVICE_NAMES = Map.of(
-            "angular", "AngularApplication",
-            "node-red", "BearingHousingNoderedService"
+        "angular", "BearingHousingFrontendService",
+        "node-red", "BearingHousingNoderedService",
+        "spring-boot", "BearingHousingBackendService"
     );
 
-    /**
-     * Angular application port - used for QR code generation
-     * npm start -> ng serve -> port 4200
-     */
+    //Angular application port - used for url QR code generation     
     private static final int ANGULAR_PORT = 4200;
 
-    /**
-     * Maximum time allowed for a WinSW command.
-     */
+    //Maximum time allowed for a WinSW command.     
     private static final long COMMAND_TIMEOUT_SECONDS = 15;
 
-
-    // =========================================================
     // GENERATE ANGULAR URL + QR CODE
-    // =========================================================
-
     @GetMapping("/qr")
     public ResponseEntity<?> generateAngularQr() {
 
         try {
-
             // Find the PC's active usable IPv4 address
             String pcIp = getPcIpAddress();
 
@@ -135,88 +117,54 @@ public class AngularServiceController {
     }
 
 
-    // =========================================================
+    
     // START ANGULAR SERVICE
-    // =========================================================
-
     @PostMapping("/start")
     public ResponseEntity<?> startAngular() {
 
         return executeWinSwCommand("start");
     }
-
-
-    // =========================================================
+    
     // STOP ANGULAR SERVICE
-    // =========================================================
-
     @PostMapping("/stop")
     public ResponseEntity<?> stopAngular() {
-
         return executeWinSwCommand("stop");
     }
-
-
-    // =========================================================
+    
     // RESTART ANGULAR SERVICE
-    // =========================================================
-
     @PostMapping("/restart")
     public ResponseEntity<?> restartAngular() {
-
         return executeWinSwCommand("restart");
     }
 
-
-    // =========================================================
     // CHECK ANGULAR SERVICE STATUS
-    // =========================================================
-
     @GetMapping("/status")
     public ResponseEntity<?> getAngularStatus() {
 
         return executeWinSwCommand("status");
     }
-
-
-    // =========================================================
-    // CHECK SPECIFIC SERVICE STATUS (Multiple Services)
-    // =========================================================
-
+    
+    // CHECK SPECIFIC SERVICE STATUS (Multiple Services)    
     @GetMapping("/status/{serviceName}")
     public ResponseEntity<?> getServiceStatus(
             @PathVariable String serviceName) {
 
         return executeServiceCommand(serviceName, "status");
     }
-
-
-    // =========================================================
+    
     // RESTART SPECIFIC SERVICE (Multiple Services)
-    // =========================================================
-
     @PostMapping("/restart/{serviceName}")
-    public ResponseEntity<?> restartService(
-            @PathVariable String serviceName) {
-
+    public ResponseEntity<?> restartService(@PathVariable String serviceName) {
         return executeServiceCommand(serviceName, "restart");
     }
-
-
-    // =========================================================
+    
     // EXECUTE WINSW COMMAND
-    // =========================================================
-
     private ResponseEntity<?> executeWinSwCommand(
             String command) {
         return executeServiceCommand("angular", command);
     }
-
-
-    // =========================================================
-    // ALLOWED WINSW COMMANDS
-    // =========================================================
-
+    
+    // ALLOWED WINSW COMMANDS    
     private boolean isAllowedCommand(
             String command) {
 
@@ -226,11 +174,8 @@ public class AngularServiceController {
                 || command.equals("status");
     }
 
-
-    // =========================================================
-    // EXECUTE SERVICE COMMAND (Multiple Services)
-    // =========================================================
-
+   
+    // EXECUTE SERVICE COMMAND (Multiple Services)    
     private ResponseEntity<?> executeServiceCommand(
             String serviceName,
             String command) {
@@ -451,11 +396,8 @@ public class AngularServiceController {
         }
     }
 
-
-    // =========================================================
-    // FIND PC IPv4 ADDRESS
-    // =========================================================
-
+    
+    // FIND PC IPv4 ADDRESS    
     private String getPcIpAddress()
             throws IOException {
 
@@ -471,22 +413,14 @@ public class AngularServiceController {
         }
 
 
-        /*
-         * Look through all network interfaces.
-         */
+        
+        //Look through all network interfaces.         
         while (interfaces.hasMoreElements()) {
 
             NetworkInterface networkInterface =
                     interfaces.nextElement();
 
-
-            /*
-             * Ignore:
-             *
-             * - Disabled interfaces
-             * - Loopback interfaces
-             * - Virtual interfaces
-             */
+            
             if (!networkInterface.isUp()
                     || networkInterface.isLoopback()
                     || networkInterface.isVirtual()) {
@@ -505,9 +439,8 @@ public class AngularServiceController {
                         addresses.nextElement();
 
 
-                /*
-                 * We only want IPv4.
-                 */
+                
+                // We only want IPv4.                
                 if (!(address instanceof Inet4Address)) {
 
                     continue;
@@ -518,46 +451,34 @@ public class AngularServiceController {
                         address.getHostAddress();
 
 
-                /*
-                 * Ignore localhost.
-                 */
+        
+                //Ignore localhost.                
                 if (ip.startsWith("127.")) {
 
                     continue;
                 }
-
-
-                /*
-                 * Ignore APIPA / link-local addresses.
-                 *
-                 * 169.254.x.x means the PC normally
-                 * did not receive a valid network address.
-                 */
+                
+                // Ignore APIPA / link-local addresses.                 *
+                // 169.254.x.x means the PC normally did not receive a valid network address.                
                 if (ip.startsWith("169.254.")) {
-
                     continue;
                 }
-
-
-                /*
-                 * This is the usable IPv4 address
-                 * assigned to the PC's active adapter.
-                 */
+                // Ignore 192.168.3.x addresses (used for Plc Ethernaternet)
+                if (ip.startsWith("192.168.3.")) {
+                    continue;
+                }                                
+                
+                // This is the usable IPv4 address assigned to the PC's active adapter.                
                 return ip;
             }
         }
-
 
         throw new IOException(
                 "No usable PC IPv4 address found."
         );
     }
-
-
-    // =========================================================
+    
     // GENERATE QR CODE
-    // =========================================================
-
     private String generateQrCode(
             String url)
             throws WriterException, IOException {
@@ -567,9 +488,8 @@ public class AngularServiceController {
                 new QRCodeWriter();
 
 
-        /*
-         * Generate 300 x 300 QR code.
-         */
+        
+        // Generate 300 x 300 QR code.        
         BitMatrix bitMatrix =
                 qrCodeWriter.encode(
                         url,
@@ -583,9 +503,7 @@ public class AngularServiceController {
                 new ByteArrayOutputStream();
 
 
-        /*
-         * Convert QR matrix to PNG.
-         */
+        //Convert QR matrix to PNG.        
         MatrixToImageWriter.writeToStream(
                 bitMatrix,
                 "PNG",
