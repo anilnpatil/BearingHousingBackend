@@ -19,7 +19,7 @@ public class BearingHousingProductionDataDTO {
     private String barcode;    
     private LocalTime cycleStartTime;    
     private LocalDateTime cycleEndTime;    
-    private Float cycleTime;    
+    private Integer cycleTime;    
     private LocalDateTime productionDateTime;    
     private String shift;    
     private String sku;

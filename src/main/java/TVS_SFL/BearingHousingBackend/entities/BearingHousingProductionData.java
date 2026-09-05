@@ -102,7 +102,7 @@ public class BearingHousingProductionData {
     private Integer totalPartCount;        
 
     @Column(name = "cycle_time")
-    private Float cycleTime;
+    private Integer cycleTime;
 
     @Column(name = "production_date_time")
     private LocalDateTime productionDateTime;   

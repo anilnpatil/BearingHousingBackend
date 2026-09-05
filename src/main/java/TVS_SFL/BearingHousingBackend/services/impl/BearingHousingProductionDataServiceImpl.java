@@ -53,7 +53,7 @@ public class BearingHousingProductionDataServiceImpl implements BearingHousingPr
                 // entity.setCycleEndTime(
                 //         cycleEndTs != null ? cycleEndTs.toLocalDateTime() : null);
 
-                entity.setCycleTime(rs.getObject("cycle_time", Float.class));
+                entity.setCycleTime(rs.getObject("cycle_time", Integer.class));
 
                 Timestamp productionTs = rs.getTimestamp("production_date_time");
                 entity.setProductionDateTime(
@@ -328,6 +328,15 @@ public class BearingHousingProductionDataServiceImpl implements BearingHousingPr
 
         return data.isEmpty() ? null : data.get(0);
     }
+
+        @Override
+        public BearingHousingProductionData getLatestProductionData() {
+                List<BearingHousingProductionData> data = jdbcTemplate.query(
+                                SqlQueries.SELECT_LATEST,
+                                ROW_MAPPER);
+
+                return data.isEmpty() ? null : data.get(0);
+        }
 
     @Override
     public List<BearingHousingProductionData> getProductionDataByFinalStatus(

@@ -27,6 +27,8 @@ public interface BearingHousingProductionDataService {
     List<BearingHousingProductionData> getProductionDataByShift(Integer shift);
 
     BearingHousingProductionData getLatestProductionDataByShift(Integer shift);
+
+    BearingHousingProductionData getLatestProductionData();
     
     List<BearingHousingProductionData> getProductionDataByFinalStatus(Integer status);
 

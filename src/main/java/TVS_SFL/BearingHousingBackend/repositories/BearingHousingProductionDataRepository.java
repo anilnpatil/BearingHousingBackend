@@ -54,7 +54,7 @@ public class BearingHousingProductionDataRepository {
                             rs.getString("operator_name"));
 
                     data.setCycleTime(
-                            rs.getFloat("cycle_time"));
+                            rs.getInt("cycle_time"));
 
                     data.setP1_beforeGlueStatus(
                             rs.getInt("p1_before_glue_status"));

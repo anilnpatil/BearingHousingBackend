@@ -91,7 +91,7 @@ public class BearingHousingImageRepository {
             data.setProductionDateTime(productionTime.toLocalDateTime());
         }
 
-        data.setCycleTime(rs.getFloat("cycle_time"));
+        data.setCycleTime(rs.getInt("cycle_time"));
         data.setP1_beforeGlueStatus(rs.getInt("p1_before_glue_status"));
         // data.setP1_toxLoadMax(rs.getFloat("p1_tox_load_max"));
         // data.setP1_toxLoadMin(rs.getFloat("p1_tox_load_min"));

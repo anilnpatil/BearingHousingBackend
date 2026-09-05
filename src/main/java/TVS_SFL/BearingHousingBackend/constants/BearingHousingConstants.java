@@ -16,6 +16,7 @@ public class BearingHousingConstants {
     public static final String GET_BY_BARCODE_WITH_PHOTOS_ENDPOINT = "/barcode/{barcode}/with-photos";
     public static final String GET_PHOTO_ENDPOINT = "/barcode/{barcode}/photo/{fileName:.+}";
     public static final String GET_BY_SHIFT_ENDPOINT = "/shift";
+    public static final String GET_LATEST_ENDPOINT = "/latest";
     public static final String GET_BY_DATE_RANGE_ENDPOINT = "/daterange";
 
     // Final Status Constants

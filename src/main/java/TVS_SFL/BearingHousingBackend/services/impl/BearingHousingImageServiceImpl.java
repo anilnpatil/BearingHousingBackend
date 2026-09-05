@@ -331,7 +331,7 @@ public class BearingHousingImageServiceImpl implements BearingHousingImageServic
     /**
      * Build image file name from production data.
      * Format: BARCODE_PROCESS_SHIFT_STATUS_DATE.jpeg
-     * Example: BH123456_P1_S1_B_OK_280726.jpeg
+    * Example: BH123456_P1_S1_B_OK_28072026.jpeg
      * 
      * @param data production data
      * @param process process identifier (P1, P2)
@@ -357,7 +357,7 @@ public class BearingHousingImageServiceImpl implements BearingHousingImageServic
     /**
      * Build PDF file name from production data.
      * Format: BARCODE_PROCESS_SHIFT_DATE.pdf
-     * Example: BH123456_P1_S1_280726.pdf
+    * Example: BH123456_P1_S1_28072026.pdf
      * 
      * @param data production data
      * @param process process identifier (P1, P2)
@@ -378,16 +378,16 @@ public class BearingHousingImageServiceImpl implements BearingHousingImageServic
 
     /**
      * Format LocalDateTime to date code string.
-     * Format: DDMMYY (e.g., "280726" for July 28, 2026)
+    * Format: DDMMYYYY (e.g., "28072026" for July 28, 2026)
      * 
      * @param dateTime the date/time to format
      * @return formatted date string
      */
     private String formatDateForFileName(LocalDateTime dateTime) {
-        return String.format("%02d%02d%02d",
+        return String.format("%02d%02d%04d",
             dateTime.getDayOfMonth(),
             dateTime.getMonthValue(),
-            dateTime.getYear() % 100);
+            dateTime.getYear());
     }
 
     // ====================================================================
@@ -574,11 +574,29 @@ public class BearingHousingImageServiceImpl implements BearingHousingImageServic
             if (lower.endsWith(extension)) {
                 String baseName = normalized.substring(0, normalized.length() - extension.length());
                 candidates.add(baseName + extension + extension);
+                addLegacyTwoDigitYearCandidate(candidates, baseName, extension);
                 break;
             }
         }
 
         return candidates;
+    }
+
+    private static void addLegacyTwoDigitYearCandidate(
+            List<String> candidates, String baseName, String extension) {
+        if (baseName.length() < 8) {
+            return;
+        }
+
+        String dateCode = baseName.substring(baseName.length() - 8);
+        if (!dateCode.matches("\\d{8}")) {
+            return;
+        }
+
+        String legacyBaseName = baseName.substring(0, baseName.length() - 8)
+            + dateCode.substring(0, 4)
+            + dateCode.substring(6);
+        candidates.add(legacyBaseName + extension);
     }
 
     /**

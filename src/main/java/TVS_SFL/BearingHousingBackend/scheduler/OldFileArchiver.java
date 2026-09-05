@@ -66,7 +66,8 @@ public class OldFileArchiver {
                 FilePathConfig.toPath(liveGraphRoot)
         );
 
-        // For each live root, find files whose filename starts with a barcode of an old record
+        // For each live root, find files whose filename starts with a barcode of an old record.
+        // File names use DDMMYYYY; archive folders use YYYY/MM/DD.
         for (Path liveRoot : liveRoots) {
             try (Stream<Path> entries = Files.walk(liveRoot)) {
                 entries.filter(Files::isRegularFile)
@@ -100,7 +101,8 @@ public class OldFileArchiver {
             return;
         }
 
-        Path target = buildArchiveFolder(data, fileName);
+        String archiveFileName = normalizeFileNameYear(fileName, data.getProductionDateTime().toLocalDate());
+        Path target = buildArchiveFolder(data, archiveFileName);
         try {
             Files.createDirectories(target.getParent());
             Files.move(file, target, StandardCopyOption.REPLACE_EXISTING);
@@ -126,6 +128,30 @@ public class OldFileArchiver {
                 .resolve(day)
                 .resolve(data.getBarcode())
                 .resolve(fileName);
+    }
+
+    private String normalizeFileNameYear(String fileName, LocalDate productionDate) {
+        String extension = "";
+        int extensionIndex = fileName.lastIndexOf('.');
+        if (extensionIndex >= 0) {
+            extension = fileName.substring(extensionIndex);
+        }
+
+        String baseName = extension.isEmpty()
+                ? fileName
+                : fileName.substring(0, extensionIndex);
+
+        if (baseName.length() < 6) {
+            return fileName;
+        }
+
+        String dateCode = baseName.substring(baseName.length() - 6);
+        if (!dateCode.matches("\\d{6}")) {
+            return fileName;
+        }
+
+        String fourDigitDate = dateCode.substring(0, 4) + productionDate.getYear();
+        return baseName.substring(0, baseName.length() - 6) + fourDigitDate + extension;
     }
 
     private Integer extractShift(String fileName) {

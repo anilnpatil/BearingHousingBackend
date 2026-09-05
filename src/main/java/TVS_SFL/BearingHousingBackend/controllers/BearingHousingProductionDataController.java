@@ -101,6 +101,16 @@ public class BearingHousingProductionDataController {
         throw new ResourceNotFoundException("Production data not found for shift: " + shift);
     }
 
+    /** Get the latest production record across all shifts */
+    @GetMapping(BearingHousingConstants.GET_LATEST_ENDPOINT)
+    public ResponseEntity<BearingHousingProductionData> getLatestProductionData() {
+        BearingHousingProductionData data = productionDataService.getLatestProductionData();
+        if (data != null) {
+            return ResponseEntity.ok(data);
+        }
+        throw new ResourceNotFoundException("No production data found");
+    }
+
     /**     * Get production data by final status     */
     @GetMapping(BearingHousingConstants.GET_BY_STATUS_ENDPOINT)
     public ResponseEntity<List<BearingHousingProductionData>> getProductionDataByStatus(
