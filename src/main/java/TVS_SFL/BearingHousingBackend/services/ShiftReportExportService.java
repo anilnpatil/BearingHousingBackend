@@ -72,6 +72,7 @@ public class ShiftReportExportService {
             "total_part_count",
             "ok_count",
             "not_ok_count",
+            "cup_consumed",
             "operator_name",
             "cycle_time"
     };
@@ -164,14 +165,14 @@ public class ShiftReportExportService {
             !reportDate.isAfter(lastReportDate);
                 reportDate = reportDate.plusDays(1)) {
             generateIfWindowCompleted(1, reportDate,
-                    LocalDateTime.of(reportDate, LocalTime.of(6, 0)),
-                    LocalDateTime.of(reportDate, LocalTime.of(14, 0)), now);
+                LocalDateTime.of(reportDate, LocalTime.of(8, 30)),
+                LocalDateTime.of(reportDate, LocalTime.of(17, 30)), now);
             generateIfWindowCompleted(2, reportDate,
-                    LocalDateTime.of(reportDate, LocalTime.of(14, 0)),
-                    LocalDateTime.of(reportDate, LocalTime.of(22, 0)), now);
+                LocalDateTime.of(reportDate, LocalTime.of(17, 30)),
+                LocalDateTime.of(reportDate.plusDays(1), LocalTime.of(1, 30)), now);
             generateIfWindowCompleted(3, reportDate,
-                    LocalDateTime.of(reportDate.minusDays(1), LocalTime.of(22, 0)),
-                    LocalDateTime.of(reportDate, LocalTime.of(6, 0)), now);
+                LocalDateTime.of(reportDate, LocalTime.of(1, 30)),
+                LocalDateTime.of(reportDate, LocalTime.of(8, 30)), now);
         }
     }
 

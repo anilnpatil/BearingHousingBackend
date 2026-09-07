@@ -24,23 +24,23 @@ public class ShiftReportScheduler {
 
     /**
      * Runs at the end of each shift.
-     * Shift 1: 06:00 to 14:00
-     * Shift 2: 14:00 to 22:00
-     * Shift 3: 22:00 to 06:00
+     * Shift 1: 08:30 to 17:30
+     * Shift 2: 17:30 to 01:30
+     * Shift 3: 01:30 to 08:30
      */    
     
-    @Scheduled(cron = "0 0 14 * * *")
+    @Scheduled(cron = "21 30 17 * * *")
     public void generateShift1Report() {
         reportExportService.generateMissingReports(LocalDateTime.now());
     }
 
     
-    @Scheduled(cron = "0 0 22 * * *")
+    @Scheduled(cron = "21 30 1 * * *")
     public void generateShift2Report() {
         reportExportService.generateMissingReports(LocalDateTime.now());
     }
     
-    @Scheduled(cron = "0 0 6 * * *")
+    @Scheduled(cron = "21 30 8 * * *")
     public void generateShift3Report() {
         reportExportService.generateMissingReports(LocalDateTime.now());
     }
