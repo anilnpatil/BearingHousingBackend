@@ -117,7 +117,10 @@ public class BearingHousingProductionDataServiceImpl implements BearingHousingPr
                         rs.getObject("p2_tox_displacement_actual", Float.class));
 
                 entity.setP2_graphStatus(
-                        rs.getObject("p2_graph_status", Integer.class));        
+                        rs.getObject("p2_graph_status", Integer.class));
+
+                entity.setCupConsumed(
+                        rs.getObject("cup_consumed", Integer.class));                
 
                 entity.setFinalStatus(
                         rs.getObject("final_status", Integer.class));
@@ -204,6 +207,7 @@ public class BearingHousingProductionDataServiceImpl implements BearingHousingPr
                 entity.getP2_toxDisplacementMin(),
                 entity.getP2_toxDisplacementActual(),
                 entity.getP2_graphStatus(),
+                entity.getCupConsumed(),
                 entity.getFinalStatus(),
                 entity.getTotalPartCount(),
                 entity.getOkCount(),
@@ -270,6 +274,7 @@ public class BearingHousingProductionDataServiceImpl implements BearingHousingPr
                 entity.getP2_toxDisplacementMin(),
                 entity.getP2_toxDisplacementActual(),
                 entity.getP2_graphStatus(),
+                entity.getCupConsumed(),
                 entity.getFinalStatus(),
                 entity.getTotalPartCount(),
                 entity.getOkCount(),

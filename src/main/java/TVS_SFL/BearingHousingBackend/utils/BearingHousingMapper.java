@@ -39,6 +39,7 @@ public class BearingHousingMapper {
         dto.setP2_toxDisplacementMin(entity.getP2_toxDisplacementMin());
         dto.setP2_toxDisplacementActual(entity.getP2_toxDisplacementActual());
         dto.setP2_graphStatus(entity.getP2_graphStatus());
+        dto.setCupConsumed(entity.getCupConsumed());
         dto.setFinalStatus(entity.getFinalStatus());
         dto.setTotalPartCount(entity.getTotalPartCount());
         dto.setOkCount(entity.getOkCount());
@@ -82,6 +83,7 @@ public class BearingHousingMapper {
         entity.setP2_toxDisplacementMin(dto.getP2_toxDisplacementMin());
         entity.setP2_toxDisplacementActual(dto.getP2_toxDisplacementActual());
         entity.setP2_graphStatus(dto.getP2_graphStatus());
+        entity.setCupConsumed(dto.getCupConsumed());
         entity.setFinalStatus(dto.getFinalStatus());
         entity.setTotalPartCount(dto.getTotalPartCount());
         entity.setOkCount(dto.getOkCount());

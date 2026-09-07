@@ -19,12 +19,7 @@ public class BearingHousingProductionDataController {
 
     @Autowired
     private BearingHousingProductionDataService productionDataService;
-
-//    // Photo storage configuration
-//     @Value("${bearinghousing.photos.directory:photos}")
-//     private String photoStorageDirectory;
-//     @Value("${bearinghousing.photos.directories:}")
-//     private String photoStorageDirectories;
+    
 
     /**     * Get all production data     */
     @GetMapping(BearingHousingConstants.GET_ALL_ENDPOINT)

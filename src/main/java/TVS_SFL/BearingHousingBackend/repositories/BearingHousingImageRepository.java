@@ -111,7 +111,7 @@ public class BearingHousingImageRepository {
         data.setP2_toxDisplacementActual(rs.getFloat("p2_tox_displacement_actual"));
         data.setP2_afterGlueStatus(rs.getInt("p2_after_glue_status"));
         data.setP2_graphStatus(rs.getInt("p2_graph_status"));
-
+        data.setCupConsumed(rs.getInt("cup_consumed"));
         data.setFinalStatus(rs.getInt("final_status"));
         data.setTotalPartCount(rs.getInt("total_part_count"));
         data.setOkCount(rs.getInt("ok_count"));

@@ -111,7 +111,9 @@ public class BearingHousingProductionDataRepository {
 
                     data.setP2_graphStatus(
                             rs.getInt("p2_graph_status"));        
-
+                    data.setCupConsumed(
+                            rs.getInt("cup_consumed"));
+                            
                     data.setFinalStatus(
                             rs.getInt("final_status"));        
 

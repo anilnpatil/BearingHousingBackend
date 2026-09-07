@@ -89,6 +89,9 @@ public class BearingHousingProductionData {
     @Column(name = "p2_graph_status")
     private Integer p2_graphStatus;
 
+    @Column(name = "cup_consumed")
+    private Integer cupConsumed;
+
     @Column(name = "final_status")
     private Integer finalStatus;
 
