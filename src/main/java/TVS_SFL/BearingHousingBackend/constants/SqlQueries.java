@@ -55,9 +55,9 @@ public final class SqlQueries {
 
     public static final String SELECT_BY_SHIFT = "SELECT * FROM " + BearingHousingConstants.TABLE_NAME + " WHERE " + BearingHousingConstants.COLUMN_SHIFT + " = ?";
 
-    public static final String SELECT_LATEST_BY_SHIFT = "SELECT * FROM " + BearingHousingConstants.TABLE_NAME + " WHERE " + BearingHousingConstants.COLUMN_SHIFT + " = ? ORDER BY " + BearingHousingConstants.COLUMN_PRODUCTION_DATETIME + " DESC LIMIT 1";
+        public static final String SELECT_LATEST_BY_SHIFT = "SELECT * FROM " + BearingHousingConstants.TABLE_NAME + " WHERE " + BearingHousingConstants.COLUMN_SHIFT + " = ? ORDER BY " + BearingHousingConstants.COLUMN_ID + " DESC LIMIT 1";
 
-        public static final String SELECT_LATEST = "SELECT * FROM " + BearingHousingConstants.TABLE_NAME + " ORDER BY " + BearingHousingConstants.COLUMN_PRODUCTION_DATETIME + " DESC, " + BearingHousingConstants.COLUMN_ID + " DESC LIMIT 1";
+        public static final String SELECT_LATEST = "SELECT * FROM " + BearingHousingConstants.TABLE_NAME + " ORDER BY " + BearingHousingConstants.COLUMN_ID + " DESC LIMIT 1";
 
     public static final String SELECT_BY_FINAL_STATUS = "SELECT * FROM " + BearingHousingConstants.TABLE_NAME + " WHERE " + BearingHousingConstants.COLUMN_FINAL_STATUS + " = ?";
 
