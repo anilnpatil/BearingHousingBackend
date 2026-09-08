@@ -145,6 +145,11 @@ public class OldFileArchiver {
             return fileName;
         }
 
+        String eightDigitDate = baseName.substring(baseName.length() - 8);
+        if (eightDigitDate.matches("\\d{8}")) {
+            return fileName;
+        }
+
         String dateCode = baseName.substring(baseName.length() - 6);
         if (!dateCode.matches("\\d{6}")) {
             return fileName;
