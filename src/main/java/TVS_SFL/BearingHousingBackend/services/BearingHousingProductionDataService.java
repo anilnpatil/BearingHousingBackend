@@ -2,6 +2,7 @@ package TVS_SFL.BearingHousingBackend.services;
 
 import TVS_SFL.BearingHousingBackend.entities.BearingHousingProductionData;
 import TVS_SFL.BearingHousingBackend.dto.PaginatedResponse;
+import TVS_SFL.BearingHousingBackend.dto.DataLocationResult;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -10,6 +11,8 @@ public interface BearingHousingProductionDataService {
     List<BearingHousingProductionData> getAllProductionData();
     
     BearingHousingProductionData getProductionDataByBarcode(String barcode);
+    BearingHousingProductionData getProductionDataByBarcodeFromArchive(String barcode);
+    DataLocationResult getProductionDataLocation(String barcode);
     BearingHousingProductionData getProductionDataAndPhotosByBarcode(String barcode);
     
     BearingHousingProductionData saveProductionData(BearingHousingProductionData dto);

@@ -11,7 +11,7 @@ import java.time.LocalTime;
 @Setter
 @Entity
 @Table(
-    name = "bearing_housing_production_data",
+    name = "bearing_housing_production_data_archive",
     indexes = {
         @Index(name = "idx_barcode", columnList = "barcode"),
         @Index(name = "idx_production_date_time", columnList = "production_date_time"),
@@ -20,7 +20,7 @@ import java.time.LocalTime;
         @Index(name = "idx_shift_production_date_time", columnList = "shift, production_date_time")
     }
 )
-public class BearingHousingProductionData {
+public class BearingHousingProductionDataArchive {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

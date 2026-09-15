@@ -18,17 +18,14 @@ public class BearingHousingConstants {
     public static final String GET_BY_SHIFT_ENDPOINT = "/shift";
     public static final String GET_LATEST_ENDPOINT = "/latest";
     public static final String GET_BY_DATE_RANGE_ENDPOINT = "/daterange";
-
     // Final Status Constants
     public static final Integer STATUS_OK = 1;
     public static final Integer STATUS_NOT_OK = 0;
     public static final Integer STATUS_PENDING = 2;
-
     // Glue Status Constants
     public static final Integer GLUE_STATUS_PENDING = 0;
     public static final Integer GLUE_STATUS_COMPLETED = 1;
     public static final Integer GLUE_STATUS_FAILED = 2;
-
     // Error Messages
     public static final String RECORD_NOT_FOUND = "Record not found";
     public static final String INVALID_REQUEST = "Invalid request data";
@@ -37,6 +34,7 @@ public class BearingHousingConstants {
 
     // Database Constants
     public static final String TABLE_NAME = "bearing_housing_production_data";
+    public static final String ARCHIVE_TABLE_NAME = "bearing_housing_production_data_archive";
     public static final String COLUMN_ID = "id";
     public static final String COLUMN_BARCODE = "barcode";
     public static final String COLUMN_NUMBER_OF_PROCESS = "number_of_process";
@@ -77,7 +75,6 @@ public class BearingHousingConstants {
     public static final String COLUMN_OK_COUNT = "ok_count";
     public static final String COLUMN_NOT_OK_COUNT = "not_ok_count";
     public static final String COLUMN_OPERATOR_NAME = "operator_name";
-
     private BearingHousingConstants() {
         // Private constructor to prevent instantiation
     }

@@ -36,7 +36,15 @@ public class ProductionReportRepository {
                 MAX(total_part_count) AS total_count,
                 MAX(ok_count) AS ok_count,
                 MAX(not_ok_count) AS not_ok_count
-            FROM bearing_housing_production_data
+            FROM (
+                  SELECT production_date_time, sku, shift,
+                      total_part_count, ok_count, not_ok_count
+                  FROM bearing_housing_production_data
+                UNION ALL
+                  SELECT production_date_time, sku, shift,
+                      total_part_count, ok_count, not_ok_count
+                  FROM bearing_housing_production_data_archive
+            ) AS combined_production_data
             WHERE production_date_time >= ?::timestamp
               AND production_date_time < ?::timestamp
             """);
@@ -85,7 +93,15 @@ public class ProductionReportRepository {
                 MAX(total_part_count) AS total_count,
                 MAX(ok_count) AS ok_count,
                 MAX(not_ok_count) AS not_ok_count
-            FROM bearing_housing_production_data
+            FROM (
+                  SELECT production_date_time, sku, shift,
+                      total_part_count, ok_count, not_ok_count
+                  FROM bearing_housing_production_data
+                UNION ALL
+                  SELECT production_date_time, sku, shift,
+                      total_part_count, ok_count, not_ok_count
+                  FROM bearing_housing_production_data_archive
+            ) AS combined_production_data
             WHERE EXTRACT(YEAR FROM production_date_time) = ?
             """);
 
@@ -129,7 +145,15 @@ public class ProductionReportRepository {
                 MAX(total_part_count) AS total_count,
                 MAX(ok_count) AS ok_count,
                 MAX(not_ok_count) AS not_ok_count
-            FROM bearing_housing_production_data
+            FROM (
+                  SELECT production_date_time, sku, shift,
+                      total_part_count, ok_count, not_ok_count
+                  FROM bearing_housing_production_data
+                UNION ALL
+                  SELECT production_date_time, sku, shift,
+                      total_part_count, ok_count, not_ok_count
+                  FROM bearing_housing_production_data_archive
+            ) AS combined_production_data
             WHERE EXTRACT(YEAR FROM production_date_time) = ?
             """);
 
@@ -155,29 +179,82 @@ public class ProductionReportRepository {
                 productionReportRowMapper()
         );
     }
+
+    // YEAR REPORT
+    public List<ProductionReportRow> getYearReport(
+            int year,
+            String sku,
+            Integer shift) {
+
+        StringBuilder sql = new StringBuilder("""
+            SELECT
+                DATE_TRUNC('year', production_date_time)::date AS report_date,
+                sku,
+                shift,
+                MAX(total_part_count) AS total_count,
+                MAX(ok_count) AS ok_count,
+                MAX(not_ok_count) AS not_ok_count
+            FROM (
+                  SELECT production_date_time, sku, shift,
+                      total_part_count, ok_count, not_ok_count
+                  FROM bearing_housing_production_data
+                UNION ALL
+                  SELECT production_date_time, sku, shift,
+                      total_part_count, ok_count, not_ok_count
+                  FROM bearing_housing_production_data_archive
+            ) AS combined_production_data
+            WHERE production_date_time >= ?
+              AND production_date_time < ?
+            """);
+
+        List<Object> params = new ArrayList<>();
+        LocalDate start = LocalDate.of(year, 1, 1);
+        params.add(start.atStartOfDay());
+        params.add(start.plusYears(1).atStartOfDay());
+
+        appendFilters(sql, params, sku, shift);
+
+        sql.append("""
+            GROUP BY
+                DATE_TRUNC('year', production_date_time)::date,
+                sku,
+                shift
+            ORDER BY
+                report_date,
+                sku,
+                shift
+            """);
+
+        return jdbcTemplate.query(
+                sql.toString(),
+                params.toArray(),
+                productionReportRowMapper()
+        );
+    }
     
     // COMMON FILTERS    
-   private void appendFilters(
+    private void appendFilters(
         StringBuilder sql,
         List<Object> params,
         String sku,
         Integer shift) {
 
-    
-    if (sku != null
+        sql.append(" AND NULLIF(BTRIM(sku), '') IS NOT NULL AND BTRIM(sku) <> '0' ");
+
+        if (sku != null
             && !sku.isBlank()
             && !sku.equalsIgnoreCase("ALL")
             && !sku.equals("0")) {
 
-        sql.append(" AND sku = ? ");
-        params.add(sku);
+            sql.append(" AND BTRIM(sku) = ? ");
+            params.add(sku.trim());
+        }
+
+        if (shift != null && shift > 0) {
+            sql.append(" AND shift = ? ");
+            params.add(shift);
+        }
     }
-    
-    if (shift != null && shift > 0) {
-        sql.append(" AND shift = ? ");
-        params.add(shift);
-    }
-}
    
     // ROW MAPPER
     

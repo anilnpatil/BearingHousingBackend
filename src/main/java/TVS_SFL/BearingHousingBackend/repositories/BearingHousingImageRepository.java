@@ -35,17 +35,28 @@ public class BearingHousingImageRepository {
         "SELECT * FROM bearing_housing_production_data WHERE production_date_time < ?";
 
     /**
-     * Find production data by barcode. Returns null if not found.
+     * Find production data by barcode. Checks live table first and falls back to archive table.
+     * Returns null if not found.
      */
     public BearingHousingProductionData findByBarcode(String barcode) {
-            try {
+        try {
             return jdbcTemplate.queryForObject(
                 QUERY_BY_BARCODE,
                 getProductionDataRowMapper(),
                 barcode
             );
         } catch (Exception ex) {
-            logger.error("Error finding barcode: {}", barcode, ex);
+            logger.debug("Barcode {} not found in live table, checking archive table.", barcode);
+        }
+
+        try {
+            return jdbcTemplate.queryForObject(
+                "SELECT * FROM bearing_housing_production_data_archive WHERE barcode = ? LIMIT 1",
+                getProductionDataRowMapper(),
+                barcode
+            );
+        } catch (Exception archiveEx) {
+            logger.error("Error finding barcode in live or archive tables: {}", barcode, archiveEx);
             return null;
         }
     }
@@ -101,7 +112,6 @@ public class BearingHousingImageRepository {
         data.setP1_toxDisplacementActual(rs.getFloat("p1_tox_displacement_actual"));
         data.setP1_afterGlueStatus(rs.getInt("p1_after_glue_status"));
         data.setP1_graphStatus(rs.getInt("p1_graph_status"));
-
         data.setP2_beforeGlueStatus(rs.getInt("p2_before_glue_status"));
         // data.setP2_toxLoadMax(rs.getFloat("p2_tox_load_max"));
         // data.setP2_toxLoadMin(rs.getFloat("p2_tox_load_min"));

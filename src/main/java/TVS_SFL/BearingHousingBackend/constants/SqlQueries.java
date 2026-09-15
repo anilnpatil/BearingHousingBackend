@@ -8,6 +8,25 @@ public final class SqlQueries {
 
     public static final String SELECT_BY_ID = "SELECT * FROM " + BearingHousingConstants.TABLE_NAME + " WHERE " + BearingHousingConstants.COLUMN_ID + " = ?";
         public static final String SELECT_BY_BARCODE = "SELECT * FROM " + BearingHousingConstants.TABLE_NAME + " WHERE " + BearingHousingConstants.COLUMN_BARCODE + " = ? LIMIT 1";
+    public static final String SELECT_BY_BARCODE_ARCHIVE = "SELECT * FROM " + BearingHousingConstants.ARCHIVE_TABLE_NAME + " WHERE " + BearingHousingConstants.COLUMN_BARCODE + " = ? LIMIT 1";
+
+    public static final String SELECT_OLD_RECORDS_FOR_ARCHIVE =
+            "SELECT * FROM " + BearingHousingConstants.TABLE_NAME +
+            " WHERE production_date_time < NOW() - INTERVAL '? years'";
+
+    public static final String INSERT_INTO_ARCHIVE =
+            "INSERT INTO " + BearingHousingConstants.ARCHIVE_TABLE_NAME + " (" +
+            "id, barcode, operator_name, shift, sku, number_of_process, cycle_start_time, " +
+            "p1_before_glue_status, p1_after_glue_status, p1_tox_load_actual, p1_tox_displacement_max, " +
+            "p1_tox_displacement_min, p1_tox_displacement_actual, p1_graph_status, " +
+            "p2_before_glue_status, p2_after_glue_status, p2_tox_load_actual, p2_tox_displacement_max, " +
+            "p2_tox_displacement_min, p2_tox_displacement_actual, p2_graph_status, cup_consumed, " +
+            "final_status, ok_count, not_ok_count, total_part_count, cycle_time, production_date_time) " +
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+    public static final String DELETE_ARCHIVED_RECORDS =
+            "DELETE FROM " + BearingHousingConstants.TABLE_NAME +
+            " WHERE production_date_time < NOW() - INTERVAL '? years'";
 
     public static final String INSERT = "INSERT INTO " + BearingHousingConstants.TABLE_NAME + " (" +
             BearingHousingConstants.COLUMN_BARCODE + ", " + BearingHousingConstants.COLUMN_CYCLE_START_TIME + ", " +

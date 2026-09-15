@@ -30,7 +30,13 @@ public class CupConsumptionReportRepository {
               SELECT production_date_time::date AS report_period,
                        shift,
                   COALESCE(MAX(cup_consumed), 0) AS cup_consumed
-                FROM bearing_housing_production_data
+                FROM (
+                    SELECT production_date_time, shift, cup_consumed
+                    FROM bearing_housing_production_data
+                    UNION ALL
+                    SELECT production_date_time, shift, cup_consumed
+                    FROM bearing_housing_production_data_archive
+                ) AS combined_production_data
               WHERE production_date_time >= ?::timestamp
                   AND production_date_time < ?::timestamp
                 """;
@@ -91,7 +97,13 @@ public class CupConsumptionReportRepository {
                     SELECT production_date_time::date AS production_day,
                            shift,
                            COALESCE(MAX(cup_consumed), 0) AS daily_cup_consumed
-                    FROM bearing_housing_production_data
+                    FROM (
+                        SELECT production_date_time, shift, cup_consumed
+                        FROM bearing_housing_production_data
+                        UNION ALL
+                        SELECT production_date_time, shift, cup_consumed
+                        FROM bearing_housing_production_data_archive
+                    ) AS combined_production_data
                     WHERE production_date_time >= ?::timestamp
                       AND production_date_time < ?::timestamp
                 """.formatted(periodExpression));

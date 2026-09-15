@@ -59,4 +59,17 @@ public class ProductionReportServiceImpl
                 shift
         );
     }
+
+        @Override
+        public List<ProductionReportRow> getYearReport(
+                        int year,
+                        String sku,
+                        Integer shift) {
+
+                return productionReportRepository.getYearReport(
+                                year,
+                                sku,
+                                shift
+                );
+        }
 }

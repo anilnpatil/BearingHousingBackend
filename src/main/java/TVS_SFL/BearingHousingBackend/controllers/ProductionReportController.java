@@ -68,4 +68,20 @@ public class ProductionReportController {
 
         return ResponseEntity.ok(result);
     }
+
+        @GetMapping("/year")
+        public ResponseEntity<List<ProductionReportRow>> getYearReport(
+                        @RequestParam int year,
+                        @RequestParam(required = false) String sku,
+                        @RequestParam(required = false) Integer shift) {
+
+                List<ProductionReportRow> result =
+                                productionReportService.getYearReport(
+                                                year,
+                                                sku,
+                                                shift
+                                );
+
+                return ResponseEntity.ok(result);
+        }
 }

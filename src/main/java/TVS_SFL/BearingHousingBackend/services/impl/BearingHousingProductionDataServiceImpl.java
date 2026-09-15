@@ -1,8 +1,11 @@
 package TVS_SFL.BearingHousingBackend.services.impl;
 
 import TVS_SFL.BearingHousingBackend.entities.BearingHousingProductionData;
+import TVS_SFL.BearingHousingBackend.repositories.BearingHousingProductionDataArchiveRepository;
 import TVS_SFL.BearingHousingBackend.services.BearingHousingProductionDataService;
 import TVS_SFL.BearingHousingBackend.constants.SqlQueries;
+import TVS_SFL.BearingHousingBackend.dto.DataLocationResult;
+import TVS_SFL.BearingHousingBackend.dto.DataLocation;
 import TVS_SFL.BearingHousingBackend.dto.PaginatedResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,11 +19,14 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.ResultSet;
+import java.sql.Time;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -30,6 +36,9 @@ public class BearingHousingProductionDataServiceImpl implements BearingHousingPr
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
+
+    @Autowired
+    private BearingHousingProductionDataArchiveRepository archiveRepository;
 
     @Value("${bearinghousing.photos.directory:photos}")
     private String photoStorageDirectory;
@@ -45,9 +54,9 @@ public class BearingHousingProductionDataServiceImpl implements BearingHousingPr
                 entity.setId(rs.getLong("id"));
                 entity.setBarcode(rs.getString("barcode"));
 
-                Timestamp cycleStartTs = rs.getTimestamp("cycle_start_time");
+                Time cycleStartTime = rs.getTime("cycle_start_time");
                 entity.setCycleStartTime(
-                        cycleStartTs != null ? cycleStartTs.toLocalDateTime().toLocalTime() : null);
+                        cycleStartTime != null ? cycleStartTime.toLocalTime() : null);
 
                 // Timestamp cycleEndTs = rs.getTimestamp("cycle_end_time");
                 // entity.setCycleEndTime(
@@ -139,9 +148,36 @@ public class BearingHousingProductionDataServiceImpl implements BearingHousingPr
                 return entity;
             };
 
+    private List<BearingHousingProductionData> mergeLiveAndArchive(
+            List<BearingHousingProductionData> liveData,
+            List<BearingHousingProductionData> archiveData) {
+
+        Map<Long, BearingHousingProductionData> merged = new LinkedHashMap<>();
+
+        if (liveData != null) {
+            for (BearingHousingProductionData item : liveData) {
+                if (item != null) {
+                    merged.put(item.getId(), item);
+                }
+            }
+        }
+
+        if (archiveData != null) {
+            for (BearingHousingProductionData item : archiveData) {
+                if (item != null) {
+                    merged.putIfAbsent(item.getId(), item);
+                }
+            }
+        }
+
+        return new ArrayList<>(merged.values());
+    }
+
     @Override
     public List<BearingHousingProductionData> getAllProductionData() {
-        return jdbcTemplate.query(SqlQueries.SELECT_ALL, ROW_MAPPER);
+        List<BearingHousingProductionData> liveData = jdbcTemplate.query(SqlQueries.SELECT_ALL, ROW_MAPPER);
+        List<BearingHousingProductionData> archiveData = archiveRepository.findByFinalStatus(1);
+        return mergeLiveAndArchive(liveData, archiveData);
     }
 
     @Override
@@ -149,7 +185,31 @@ public class BearingHousingProductionDataServiceImpl implements BearingHousingPr
         List<BearingHousingProductionData> results =
                 jdbcTemplate.query(SqlQueries.SELECT_BY_BARCODE, ROW_MAPPER, barcode);
 
-        return results.isEmpty() ? null : results.get(0);
+        if (!results.isEmpty()) {
+            return results.get(0);
+        }
+
+        return archiveRepository.findByBarcode(barcode);
+    }
+
+    @Override
+    public BearingHousingProductionData getProductionDataByBarcodeFromArchive(String barcode) {
+        return archiveRepository.findByBarcode(barcode);
+    }
+
+    @Override
+    public DataLocationResult getProductionDataLocation(String barcode) {
+        BearingHousingProductionData liveRecord = getProductionDataByBarcode(barcode);
+        if (liveRecord != null) {
+            return new DataLocationResult(DataLocation.LIVE, liveRecord);
+        }
+
+        BearingHousingProductionData archiveRecord = getProductionDataByBarcodeFromArchive(barcode);
+        if (archiveRecord != null) {
+            return new DataLocationResult(DataLocation.ARCHIVED, archiveRecord);
+        }
+
+        return new DataLocationResult(DataLocation.NOT_FOUND, null);
     }
 
     @Override
@@ -157,7 +217,11 @@ public class BearingHousingProductionDataServiceImpl implements BearingHousingPr
         List<BearingHousingProductionData> results =
                 jdbcTemplate.query(SqlQueries.SELECT_BY_BARCODE, ROW_MAPPER, barcode);
 
-        return results.isEmpty() ? null : results.get(0);
+        if (!results.isEmpty()) {
+            return results.get(0);
+        }
+
+        return archiveRepository.findByBarcode(barcode);
     }
 
     @Override
@@ -296,30 +360,36 @@ public class BearingHousingProductionDataServiceImpl implements BearingHousingPr
 
     @Override
     public List<BearingHousingProductionData> getProductionDataBySku(String sku) {
-        return jdbcTemplate.query(
+        List<BearingHousingProductionData> liveData = jdbcTemplate.query(
                 SqlQueries.SELECT_BY_SKU,
                 ROW_MAPPER,
                 sku);
+        List<BearingHousingProductionData> archiveData = archiveRepository.findBySku(sku);
+        return mergeLiveAndArchive(liveData, archiveData);
     }
 
     @Override
     public List<BearingHousingProductionData> getProductionDataByOperatorName(
             String operatorName) {
 
-        return jdbcTemplate.query(
+        List<BearingHousingProductionData> liveData = jdbcTemplate.query(
                 SqlQueries.SELECT_BY_OPERATOR,
                 ROW_MAPPER,
                 operatorName);
+        List<BearingHousingProductionData> archiveData = archiveRepository.findByOperatorName(operatorName);
+        return mergeLiveAndArchive(liveData, archiveData);
     }
 
     @Override
     public List<BearingHousingProductionData> getProductionDataByShift(
             Integer shift) {
 
-        return jdbcTemplate.query(
+        List<BearingHousingProductionData> liveData = jdbcTemplate.query(
                 SqlQueries.SELECT_BY_SHIFT,
                 ROW_MAPPER,
                 shift);
+        List<BearingHousingProductionData> archiveData = archiveRepository.findByShift(shift);
+        return mergeLiveAndArchive(liveData, archiveData);
     }
 
     @Override
@@ -331,7 +401,11 @@ public class BearingHousingProductionDataServiceImpl implements BearingHousingPr
                 ROW_MAPPER,
                 shift);
 
-        return data.isEmpty() ? null : data.get(0);
+        if (!data.isEmpty()) {
+            return data.get(0);
+        }
+
+        return archiveRepository.findLatestByShift(shift);
     }
 
         @Override
@@ -340,17 +414,23 @@ public class BearingHousingProductionDataServiceImpl implements BearingHousingPr
                                 SqlQueries.SELECT_LATEST,
                                 ROW_MAPPER);
 
-                return data.isEmpty() ? null : data.get(0);
+                if (!data.isEmpty()) {
+                        return data.get(0);
+                }
+
+                return archiveRepository.findLatest();
         }
 
     @Override
     public List<BearingHousingProductionData> getProductionDataByFinalStatus(
             Integer status) {
 
-        return jdbcTemplate.query(
+        List<BearingHousingProductionData> liveData = jdbcTemplate.query(
                 SqlQueries.SELECT_BY_FINAL_STATUS,
                 ROW_MAPPER,
                 status);
+        List<BearingHousingProductionData> archiveData = archiveRepository.findByFinalStatus(status);
+        return mergeLiveAndArchive(liveData, archiveData);
     }
 
     @Override
@@ -415,55 +495,62 @@ public class BearingHousingProductionDataServiceImpl implements BearingHousingPr
             LocalDate startDate, LocalDate endDate, Integer shift, String sku, int page, int size) {
 
         int offset = page * size;
-        List<BearingHousingProductionData> data;
-        long totalElements;
+        String combinedSource = """
+                FROM (
+                    SELECT id, barcode, operator_name, shift, sku, number_of_process,
+                           cycle_start_time, cycle_time, production_date_time,
+                           p1_before_glue_status, p1_after_glue_status,
+                           p1_tox_load_actual, p1_tox_displacement_max,
+                           p1_tox_displacement_min, p1_tox_displacement_actual,
+                           p1_graph_status, p2_before_glue_status, p2_after_glue_status,
+                           p2_tox_load_actual, p2_tox_displacement_max,
+                           p2_tox_displacement_min, p2_tox_displacement_actual,
+                           p2_graph_status, cup_consumed, final_status,
+                           ok_count, not_ok_count, total_part_count
+                    FROM bearing_housing_production_data
+                    UNION ALL
+                    SELECT id, barcode, operator_name, shift, sku, number_of_process,
+                           cycle_start_time, cycle_time, production_date_time,
+                           p1_before_glue_status, p1_after_glue_status,
+                           p1_tox_load_actual, p1_tox_displacement_max,
+                           p1_tox_displacement_min, p1_tox_displacement_actual,
+                           p1_graph_status, p2_before_glue_status, p2_after_glue_status,
+                           p2_tox_load_actual, p2_tox_displacement_max,
+                           p2_tox_displacement_min, p2_tox_displacement_actual,
+                           p2_graph_status, cup_consumed, final_status,
+                           ok_count, not_ok_count, total_part_count
+                    FROM bearing_housing_production_data_archive
+                ) AS combined_production_data
+                WHERE production_date_time >= ?
+                  AND production_date_time < ?
+                """;
 
-        // Determine which query to use based on filters
-        if (shift != null && sku != null && !sku.trim().isEmpty()) {
-            // Both shift and SKU filters
-            data = jdbcTemplate.query(
-                    SqlQueries.SELECT_BY_DATE_RANGE_WITH_SHIFT_AND_SKU,
-                    ROW_MAPPER,
-                    startDate, endDate, shift, sku, size, offset);
-            
-            totalElements = jdbcTemplate.queryForObject(
-                    SqlQueries.COUNT_BY_DATE_RANGE_WITH_SHIFT_AND_SKU,
-                    Long.class,
-                    startDate, endDate, shift, sku);
-        } else if (shift != null) {
-            // Only shift filter
-            data = jdbcTemplate.query(
-                    SqlQueries.SELECT_BY_DATE_RANGE_WITH_SHIFT,
-                    ROW_MAPPER,
-                    startDate, endDate, shift, size, offset);
-            
-            totalElements = jdbcTemplate.queryForObject(
-                    SqlQueries.COUNT_BY_DATE_RANGE_WITH_SHIFT,
-                    Long.class,
-                    startDate, endDate, shift);
-        } else if (sku != null && !sku.trim().isEmpty()) {
-            // Only SKU filter
-            data = jdbcTemplate.query(
-                    SqlQueries.SELECT_BY_DATE_RANGE_WITH_SKU,
-                    ROW_MAPPER,
-                    startDate, endDate, sku, size, offset);
-            
-            totalElements = jdbcTemplate.queryForObject(
-                    SqlQueries.COUNT_BY_DATE_RANGE_WITH_SKU,
-                    Long.class,
-                    startDate, endDate, sku);
-        } else {
-            // No filters, only date range
-            data = jdbcTemplate.query(
-                    SqlQueries.SELECT_BY_DATE_RANGE,
-                    ROW_MAPPER,
-                    startDate, endDate, size, offset);
-            
-            totalElements = jdbcTemplate.queryForObject(
-                    SqlQueries.COUNT_BY_DATE_RANGE,
-                    Long.class,
-                    startDate, endDate);
+        List<Object> filterParams = new ArrayList<>();
+        filterParams.add(startDate.atStartOfDay());
+        filterParams.add(endDate.plusDays(1).atStartOfDay());
+
+        StringBuilder filters = new StringBuilder();
+        if (shift != null) {
+            filters.append(" AND shift = ?");
+            filterParams.add(shift);
         }
+        if (sku != null && !sku.trim().isEmpty() && !sku.equalsIgnoreCase("ALL") && !sku.equals("0")) {
+            filters.append(" AND sku = ?");
+            filterParams.add(sku);
+        }
+
+        String selectSql = "SELECT * " + combinedSource + filters
+                + " ORDER BY production_date_time DESC LIMIT ? OFFSET ?";
+        List<Object> selectParams = new ArrayList<>(filterParams);
+        selectParams.add(size);
+        selectParams.add(offset);
+
+        List<BearingHousingProductionData> data = jdbcTemplate.query(
+                selectSql, ROW_MAPPER, selectParams.toArray());
+
+        String countSql = "SELECT COUNT(*) " + combinedSource + filters;
+        long totalElements = jdbcTemplate.queryForObject(
+                countSql, Long.class, filterParams.toArray());
 
         return new PaginatedResponse<>(data, page, size, totalElements);
     }   

@@ -24,4 +24,10 @@ public interface ProductionReportService {
             String sku,
             Integer shift
     );
+
+    List<ProductionReportRow> getYearReport(
+            int year,
+            String sku,
+            Integer shift
+    );
 }
