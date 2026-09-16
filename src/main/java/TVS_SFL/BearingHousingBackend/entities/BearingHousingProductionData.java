@@ -49,23 +49,23 @@ public class BearingHousingProductionData {
     @Column(name = "p1_after_glue_status")
     private Integer p1_afterGlueStatus;
     
-    // @Column(name = "p1_tox_load_max")
-    // private Float p1_toxLoadMax;
+    @Column(name = "p1_tox_start_load")
+    private Float p1_toxStartLoad;
 
-    // @Column(name = "p1_tox_load_min")
-    // private Float p1_toxLoadMin;
+    @Column(name = "p1_tox_mid_load")
+    private Float p1_toxMidLoad;
 
-    @Column(name = "p1_tox_load_actual")
-    private Float p1_toxLoadActual;
+    @Column(name = "p1_tox_end_load")
+    private Float p1_toxEndLoad;
     
-    @Column(name = "p1_tox_displacement_max")
-    private Float p1_toxDisplacementMax;
+    @Column(name = "p1_tox_start_displacement")
+    private Float p1_toxStartDisplacement;
 
-    @Column(name = "p1_tox_displacement_min")
-    private Float p1_toxDisplacementMin;
+    @Column(name = "p1_tox_mid_displacement")
+    private Float p1_toxMidDisplacement;
 
-    @Column(name = "p1_tox_displacement_actual")
-    private Float p1_toxDisplacementActual;
+    @Column(name = "p1_tox_end_displacement")
+    private Float p1_toxEndDisplacement;
 
     @Column(name = "p1_graph_status")
     private Integer p1_graphStatus;
@@ -76,23 +76,23 @@ public class BearingHousingProductionData {
     @Column(name = "p2_after_glue_status")
     private Integer p2_afterGlueStatus;
 
-    // @Column(name = "p2_tox_load_max")
-    // private Float p2_toxLoadMax;
+    @Column(name = "p2_tox_start_load")
+    private Float p2_toxStartLoad;
 
-    // @Column(name = "p2_tox_load_min")
-    // private Float p2_toxLoadMin;
+    @Column(name = "p2_tox_mid_load")
+    private Float p2_toxMidLoad;
 
-    @Column(name = "p2_tox_load_actual")
-    private Float p2_toxLoadActual;
+    @Column(name = "p2_tox_end_load")
+    private Float p2_toxEndLoad;
     
-    @Column(name = "p2_tox_displacement_max")
-    private Float p2_toxDisplacementMax;
+    @Column(name = "p2_tox_start_displacement")
+    private Float p2_toxStartDisplacement;
 
-    @Column(name = "p2_tox_displacement_min")
-    private Float p2_toxDisplacementMin;
+    @Column(name = "p2_tox_mid_displacement")
+    private Float p2_toxMidDisplacement;
 
-    @Column(name = "p2_tox_displacement_actual")
-    private Float p2_toxDisplacementActual;
+    @Column(name = "p2_tox_end_displacement")
+    private Float p2_toxEndDisplacement;
 
     @Column(name = "p2_graph_status")
     private Integer p2_graphStatus;
