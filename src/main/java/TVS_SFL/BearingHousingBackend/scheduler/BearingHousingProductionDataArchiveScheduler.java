@@ -16,7 +16,8 @@ public class BearingHousingProductionDataArchiveScheduler {
 
     private final BearingHousingProductionDataArchiveService productionDataArchiveService;
 
-   // @Scheduled(cron = "0 0 2 1 * *")
+   // 2am on the 1st and 16th of every month
+   //@Scheduled(cron = "0 0 2 1,16 * *")
    @Scheduled(initialDelay = 120000, fixedDelay = Long.MAX_VALUE)
     public void archiveOldProductionData() {
         try {

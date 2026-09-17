@@ -50,7 +50,7 @@ public class AngularServiceController {
     private static final int ANGULAR_PORT = 4200;
 
     //Maximum time allowed for a WinSW command.     
-    private static final long COMMAND_TIMEOUT_SECONDS = 15;
+    private static final long COMMAND_TIMEOUT_SECONDS = 90;
 
     // GENERATE ANGULAR URL + QR CODE
     @GetMapping("/qr")

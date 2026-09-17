@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.jdbc.core.ArgumentPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -116,7 +117,11 @@ public class CupConsumptionReportRepository {
         sql.append(" GROUP BY production_date_time::date, shift) daily");
         sql.append(" GROUP BY report_period, shift ORDER BY report_period, shift");
 
-        return jdbcTemplate.query(sql.toString(), params.toArray(), rowMapper());
+        return jdbcTemplate.query(
+            sql.toString(),
+            new ArgumentPreparedStatementSetter(params.toArray()),
+            rowMapper()
+        );
     }
 
     private List<CupConsumptionReportRow> query(
@@ -134,7 +139,11 @@ public class CupConsumptionReportRepository {
         sql.append(" GROUP BY ").append(groupPeriod).append(", shift");
         sql.append(" ORDER BY report_period, shift");
 
-        return jdbcTemplate.query(sql.toString(), params.toArray(), rowMapper());
+        return jdbcTemplate.query(
+            sql.toString(),
+            new ArgumentPreparedStatementSetter(params.toArray()),
+            rowMapper()
+        );
     }
 
     private RowMapper<CupConsumptionReportRow> rowMapper() {

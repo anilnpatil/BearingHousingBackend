@@ -71,6 +71,7 @@ public class BearingHousingConstants {
     public static final String COLUMN_P2_TOX_MID_DISPLACEMENT = "p2_tox_mid_displacement";
     public static final String COLUMN_P2_TOX_END_DISPLACEMENT = "p2_tox_end_displacement";
     public static final String COLUMN_P2_GRAPH_STATUS = "p2_graph_status";
+    public static final String COLUMN_CUP_CONSUMED = "cup_consumed";
     public static final String COLUMN_TOTAL_PART_COUNT = "total_part_count";
     public static final String COLUMN_OK_COUNT = "ok_count";
     public static final String COLUMN_NOT_OK_COUNT = "not_ok_count";

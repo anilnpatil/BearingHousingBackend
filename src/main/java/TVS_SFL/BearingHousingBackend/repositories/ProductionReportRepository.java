@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.jdbc.core.ArgumentPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -72,7 +73,7 @@ public class ProductionReportRepository {
 
         return jdbcTemplate.query(
                 sql.toString(),
-                params.toArray(),
+                new ArgumentPreparedStatementSetter(params.toArray()),
                 productionReportRowMapper()
         );
     }
@@ -123,7 +124,7 @@ public class ProductionReportRepository {
 
         return jdbcTemplate.query(
                 sql.toString(),
-                params.toArray(),
+                new ArgumentPreparedStatementSetter(params.toArray()),
                 productionReportRowMapper()
         );
         
@@ -175,7 +176,7 @@ public class ProductionReportRepository {
 
         return jdbcTemplate.query(
                 sql.toString(),
-                params.toArray(),
+                new ArgumentPreparedStatementSetter(params.toArray()),
                 productionReportRowMapper()
         );
     }
@@ -227,7 +228,7 @@ public class ProductionReportRepository {
 
         return jdbcTemplate.query(
                 sql.toString(),
-                params.toArray(),
+                new ArgumentPreparedStatementSetter(params.toArray()),
                 productionReportRowMapper()
         );
     }
