@@ -53,8 +53,8 @@ public interface BearingHousingImageService {
      * Example Response:
      * {
      *   "productionData": { ... },
-     *   "p1_beforeImage": { "status": "B_OK", "url": "/api/bearing-housing/image/..." },
-     *   "p1_afterImage": { "status": "A_OK", "url": "/api/bearing-housing/image/..." },
+    *   "p1_beforeImage": { "status": "B_OK", "imageUrl": "/api/bearing-housing/image/BH123456_P1_S1_B_28072026.jpeg" },
+    *   "p1_afterImage": { "status": "A_OK", "imageUrl": "/api/bearing-housing/image/BH123456_P1_S1_A_28072026.jpeg" },
      *   "p1_graphImage": { "status": "OK", "url": "/api/bearing-housing/pdf/..." },
      *   "p2_beforeImage": { ... }, // if number_of_process >= 2
      *   ...

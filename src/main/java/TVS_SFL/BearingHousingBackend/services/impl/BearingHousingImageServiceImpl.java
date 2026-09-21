@@ -51,7 +51,7 @@ public class BearingHousingImageServiceImpl implements BearingHousingImageServic
     
     // FILE NAMING PATTERNS & CONSTANTS  
     
-    /** File name pattern for images: BARCODE_PROCESS_SHIFT_STATUS_DATE.jpeg */
+    /** File name pattern for images: BARCODE_PROCESS_SHIFT_STAGE_DATE.jpeg */
     private static final String IMAGE_FILE_EXTENSION = ".jpeg";
     
     /** File name pattern for PDFs: BARCODE_PROCESS_SHIFT_DATE.pdf */
@@ -176,7 +176,7 @@ public class BearingHousingImageServiceImpl implements BearingHousingImageServic
      * Prevents directory traversal attacks.
      * 
      * Barcode Format: First part of filename before underscore
-     * Example: "BH123456_P1_S1_B_OK_280726.jpeg" → barcode = "BH123456"
+    * Example: "BH123456_P1_S1_B_280726.jpeg" → barcode = "BH123456"
      * 
      * @param fileName the file name to parse
      * @return ProductionData if barcode is valid and exists in DB
@@ -330,12 +330,12 @@ public class BearingHousingImageServiceImpl implements BearingHousingImageServic
 
     /**
      * Build image file name from production data.
-     * Format: BARCODE_PROCESS_SHIFT_STATUS_DATE.jpeg
-    * Example: BH123456_P1_S1_B_OK_28072026.jpeg
+    * Format: BARCODE_PROCESS_SHIFT_STAGE_DATE.jpeg
+    * Example: BH123456_P1_S1_B_28072026.jpeg
      * 
      * @param data production data
      * @param process process identifier (P1, P2)
-     * @param statusCode status (B_OK, B_NG, A_OK, A_NG)
+    * @param statusCode status (B_OK, B_NG, A_OK, A_NG)
      * @return generated file name
      */
     private String buildImageFileName(BearingHousingProductionData data, 
@@ -344,12 +344,13 @@ public class BearingHousingImageServiceImpl implements BearingHousingImageServic
         LocalDateTime productionTime = data.getProductionDateTime();
         String shiftCode = "S" + data.getShift();
         String dateCode = formatDateForFileName(productionTime);
+        String stageCode = statusCode.substring(0, 1);
         
         return String.format("%s_%s_%s_%s_%s%s",
             data.getBarcode(),
             process,
             shiftCode,
-            statusCode,
+            stageCode,
             dateCode,
             IMAGE_FILE_EXTENSION);
     }

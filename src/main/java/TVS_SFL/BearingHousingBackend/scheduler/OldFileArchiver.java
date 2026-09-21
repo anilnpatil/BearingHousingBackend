@@ -101,7 +101,8 @@ public class OldFileArchiver {
             return;
         }
 
-        String archiveFileName = normalizeFileNameYear(fileName, data.getProductionDateTime().toLocalDate());
+        String archiveFileName = normalizeImageFileName(
+            normalizeFileNameYear(fileName, data.getProductionDateTime().toLocalDate()));
         Path target = buildArchiveFolder(data, archiveFileName);
         try {
             Files.createDirectories(target.getParent());
@@ -157,6 +158,10 @@ public class OldFileArchiver {
 
         String fourDigitDate = dateCode.substring(0, 4) + productionDate.getYear();
         return baseName.substring(0, baseName.length() - 6) + fourDigitDate + extension;
+    }
+
+    private String normalizeImageFileName(String fileName) {
+        return fileName.replaceFirst("(?i)_(A|B)_(OK|NG)(?=_[0-9]{6,8}\\.[^.]+$)", "_$1");
     }
 
     private Integer extractShift(String fileName) {
