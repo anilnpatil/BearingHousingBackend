@@ -32,9 +32,9 @@ public class AngularServiceController {
         * Key: service-id (from frontend)  Value: WinSW executable path    
     */
     private static final Map<String, String> SERVICE_PATHS = Map.of(
-        "angular", "C:\\BearingHousingFrontendServiceCreator\\BearingHousingFrontendService.exe",
-        "node-red", "C:\\BearingHousingNoderedService\\BearingHousingNoderedService.exe",
-        "spring-boot", "C:\\BearingHousingBackendServiceCreator\\SpringBootService.exe"
+        "angular", "C:\\SFL_BearingHousingAssemblyProject\\BearingHousingFrontendServiceCreator\\BearingHousingFrontendService.exe",
+        "node-red", "C:\\SFL_BearingHousingAssemblyProject\\BearingHousingNoderedServiceCreator\\BearingHousingNoderedService.exe"
+        // "spring-boot", "C:\\SFL_BearingHousingAssemblyProject\\BearingHousingBackendServiceCreator\\SpringBootService.exe"
     );
 
     /**
@@ -42,8 +42,8 @@ public class AngularServiceController {
      */
     private static final Map<String, String> WINDOWS_SERVICE_NAMES = Map.of(
         "angular", "BearingHousingFrontendService",
-        "node-red", "BearingHousingNoderedService",
-        "spring-boot", "BearingHousingBackendService"
+        "node-red", "BearingHousingNoderedService"
+        // "spring-boot", "BearingHousingBackendService"
     );
 
     //Angular application port - used for url QR code generation     
