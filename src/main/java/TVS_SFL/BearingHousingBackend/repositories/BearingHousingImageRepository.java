@@ -103,15 +103,15 @@ public class BearingHousingImageRepository {
         }
 
         data.setCycleTime(rs.getInt("cycle_time"));
-        data.setP1_beforeGlueStatus(rs.getInt("p1_before_glue_status"));
-        data.setP1_toxStartLoad(rs.getFloat("p1_tox_start_load"));
-        data.setP1_toxMidLoad(rs.getFloat("p1_tox_mid_load"));
-        data.setP1_toxEndLoad(rs.getFloat("p1_tox_end_load"));
-        data.setP1_toxStartDisplacement(rs.getFloat("p1_tox_start_displacement"));
-        data.setP1_toxMidDisplacement(rs.getFloat("p1_tox_mid_displacement"));
-        data.setP1_toxEndDisplacement(rs.getFloat("p1_tox_end_displacement"));
-        data.setP1_afterGlueStatus(rs.getInt("p1_after_glue_status"));
-        data.setP1_graphStatus(rs.getInt("p1_graph_status"));
+        data.setP1_beforeGlueStatus(rs.getObject("p1_before_glue_status", Integer.class));
+        data.setP1_toxStartLoad(rs.getObject("p1_tox_start_load", Float.class));
+        data.setP1_toxMidLoad(rs.getObject("p1_tox_mid_load", Float.class));
+        data.setP1_toxEndLoad(rs.getObject("p1_tox_end_load", Float.class));
+        data.setP1_toxStartDisplacement(rs.getObject("p1_tox_start_displacement", Float.class));
+        data.setP1_toxMidDisplacement(rs.getObject("p1_tox_mid_displacement", Float.class));
+        data.setP1_toxEndDisplacement(rs.getObject("p1_tox_end_displacement", Float.class));
+        data.setP1_afterGlueStatus(rs.getObject("p1_after_glue_status", Integer.class));
+        data.setP1_graphStatus(rs.getObject("p1_graph_status", Integer.class));
         data.setP2_beforeGlueStatus(rs.getObject("p2_before_glue_status", Integer.class));
         data.setP2_toxStartLoad(rs.getObject("p2_tox_start_load", Float.class));
         data.setP2_toxMidLoad(rs.getObject("p2_tox_mid_load", Float.class));
