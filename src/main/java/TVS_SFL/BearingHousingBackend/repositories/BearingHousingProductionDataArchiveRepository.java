@@ -49,7 +49,8 @@ public class BearingHousingProductionDataArchiveRepository {
     }
 
     public BearingHousingProductionData findLatest() {
-        String sql = "SELECT * FROM " + BearingHousingConstants.ARCHIVE_TABLE_NAME + " ORDER BY id DESC LIMIT 1";
+        String sql = "SELECT * FROM " + BearingHousingConstants.ARCHIVE_TABLE_NAME
+            + " ORDER BY production_date_time DESC, id DESC LIMIT 1";
         List<BearingHousingProductionData> results = jdbcTemplate.query(sql, rowMapper());
         return results.isEmpty() ? null : results.get(0);
     }
